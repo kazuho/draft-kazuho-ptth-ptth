@@ -99,7 +99,6 @@ backend server. As for the application protocol to be used on the transposed
 connection, the backend server is offering both HTTP/2 and HTTP/1.1, and the
 reverse proxy selects HTTP/2.
 
-
 ~~~
 GET /reverse-endpoint HTTP/1.1
 Host: example.com
@@ -134,13 +133,11 @@ requests on the server-initiated, bidirectional QUIC streams. Note that, due to
 packet reordering, backend servers might receive these requests before receiving
 a 200 response for the OPTIONS request.
 
-After a transposed connection is established, the reverse proxy SHOULD reset
-incoming requests that it receives using a H3_REQUEST_REJECTED error
-({{Section 8.1 of HTTP3}}).
-
 Similarly to when HTTP/1.1 is used, establishment of a new HTTP/3 connection is
 required when a transposed HTTP/3 connection with different set of parameters is
-needed.
+needed. Once the transposed connection is established, the reverse proxy SHOULD
+reset incoming requests that it receives using a H3_REQUEST_REJECTED error
+({{Section 8.1 of HTTP3}}).
 
 
 # IANA Considerations
