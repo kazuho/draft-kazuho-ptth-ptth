@@ -1325,33 +1325,33 @@ reset incoming requests that it receives using a H3_REQUEST_REJECTED error
 understandings are:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-6.1">
-            <p id="section-3.2-6.1.1">SETTINGS is fine; none of the HTTP/3 settings are specific to clients or
-servers.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-6.1.1">No issues with SETTINGS; none of the HTTP/3 settings are specific to clients
+or servers.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-6.2">
-            <p id="section-3.2-6.2.1">QPACK is fine; One set of QPACK streams can handle requests flying in both
-directions.<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-6.2.1">No issues with QPACK; one set of QPACK streams can handle requests flying in
+both directions.<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-6.3">
-            <p id="section-3.2-6.3.1">The design does not interfere with WebTransport over HTTP/3; for both client-
-and server-initiated bidirectional streams, WebTransport streams can be
-identified by their signal vallues (0x41), and if they are associated to
-client- or server-initiated requests can be determined by their Session ID
-(i.e., the stream ID of the CONNECT stream).<a href="#section-3.2-6.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-3.2-6.4">
-            <p id="section-3.2-6.4.1">We need to consider how to handle quarter stream IDs of HTTP/3 datagrams;
+            <p id="section-3.2-6.3.1">We need to consider how to handle quarter stream IDs of HTTP/3 datagrams;
 but that issue not orthogonal to sending HTTP requests in both directions.
 The issue arises for any design that establishes the QUIC connection in the
 reverse direction. Maybe the answer here is to use
 <code>stream_id / 4 + (2 &lt;&lt; 60)</code> as the quarter stream IDs for datagrams
-belonging to the transposed requests.<a href="#section-3.2-6.4.1" class="pilcrow">¶</a></p>
+belonging to the transposed requests.<a href="#section-3.2-6.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-6.4">
+            <p id="section-3.2-6.4.1">Otherwise, the design does not interfere with WebTransport over HTTP/3; for
+both client- and server-initiated bidirectional streams, WebTransport streams
+can be identified by their signal vallues (0x41), and if they are associated
+to client- or server-initiated requests can be determined by their Session ID
+(i.e., the stream ID of the CONNECT stream).<a href="#section-3.2-6.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-6.5">
-            <p id="section-3.2-6.5.1">Rather than using OPTIONS, do we want to use an extended CONNECT? While
+            <p id="section-3.2-6.5.1">Rather than using OPTIONS, do we want to use an extended CONNECT? While the
 use of OPTIONS might be fine, HTTP requests without a special pseudo-header
 is end-to-end per definition. Using an extended CONNECT is a straightforward
-to constrain the setup of a transposed <em>connection</em> to hop-by-hop.<a href="#section-3.2-6.5.1" class="pilcrow">¶</a></p>
+way to constrain the setup of a transposed <em>connection</em> to hop-by-hop.<a href="#section-3.2-6.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
