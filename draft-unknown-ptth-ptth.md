@@ -20,10 +20,10 @@ normative:
 This document specifies the Protocol for Transposed Transactions over HTTP
 (PTTH), an HTTP extension that allows a backend server to establish an HTTP
 connection to a reverse proxy and transpose HTTP request flow. The reverse
-proxy then forwards incoming requests to the backend server. This extension
-lets backend servers behind restrictive firewalls accept HTTP traffic through
-reverse proxies without changing firewall settings and with virtually zero
-overhead.
+proxy then forwards incoming requests to the backend server over the transposed
+connection. This extension lets backend servers behind restrictive firewalls
+accept HTTP traffic through reverse proxies without changing firewall settings
+and with virtually zero overhead.
 
 
 --- middle
@@ -47,6 +47,8 @@ forwarded to the transposed connection, providing flexibility to deployments.
 Because PTTH transposes the direction of communication rather than
 encapsulating traffic, it incurs virtually zero overhead and delivers high
 efficiency.
+
+TODO: expand
 
 
 # Conventions and Definitions
@@ -141,6 +143,7 @@ reset incoming requests that it receives using a H3_REQUEST_REJECTED error
 
 TODO: Discuss the downsides of transposing an HTTP/3 connection. Kazuho's
 understandings are:
+
 * SETTINGS is fine; none of the HTTP/3 settings are specific to clients or
   servers.
 * QPACK is fine; One set of QPACK streams can handle requests flying in both
