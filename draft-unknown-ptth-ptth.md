@@ -139,6 +139,28 @@ needed. Once the transposed connection is established, the reverse proxy SHOULD
 reset incoming requests that it receives using a H3_REQUEST_REJECTED error
 ({{Section 8.1 of HTTP3}}).
 
+TODO: Discuss the downsides of transposing an HTTP/3 connection. Kazuho's
+understandings are:
+* SETTINGS is fine; none of the HTTP/3 settings are specific to clients or
+  servers.
+* QPACK is fine; One set of QPACK streams can handle requests flying in both
+  directions.
+* The design does not interfere with WebTransport over HTTP/3; for both client-
+  and server-initiated bidirectional streams, WebTransport streams can be
+  identified by their signal vallues (0x41), and if they are associated to
+  client- or server-initiated requests can be determined by their Session ID
+  (i.e., the stream ID of the CONNECT stream).
+* We need to consider how to handle quarter stream IDs of HTTP/3 datagrams;
+  but that issue not orthogonal to sending HTTP requests in both directions.
+  The issue arises for any design that establishes the QUIC connection in the
+  reverse direction. Maybe the answer here is to use
+  `stream_id / 4 + (2 << 60)` as the quarter stream IDs for datagrams
+  belonging to the transposed requests.
+* Rather than using OPTIONS, do we want to use an extended CONNECT? While
+  use of OPTIONS might be fine, HTTP requests without a special pseudo-header
+  is end-to-end per definition. Using an extended CONNECT is a straightforward
+  to constrain the setup of a transposed _connection_ to hop-by-hop.
+
 
 # IANA Considerations
 
