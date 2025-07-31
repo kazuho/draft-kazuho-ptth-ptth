@@ -130,6 +130,9 @@ In HTTP/3 ({{!HTTP3=RFC9114}}), the OPTIONS method
 the HTTP/3 connection. As the flow of the existing connection is transposed,
 neither the `:protocol` pseudo-header field nor the ALPN header field is used.
 
+The target of the OPTIONS request is the endpoint that tranposes the connection;
+therefore, the asterisk ("*") request is never used for establishing PTTH.
+
 Once the reverse proxy responds with a 2xx response, it starts forwarding HTTP
 requests on the server-initiated, bidirectional QUIC streams. Note that, due to
 packet reordering, backend servers might receive these requests before receiving
