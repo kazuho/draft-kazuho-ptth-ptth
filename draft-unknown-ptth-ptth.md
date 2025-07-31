@@ -76,13 +76,13 @@ HTTP/1.1 upgrade is used, with the ALPN specifying HTTP/2.
 
 ## HTTP/1.1
 
-In HTTP/1.1 ({{HTTP1=RFC9112}}), the HTTP upgrade mechanism
+In HTTP/1.1 ({{!HTTP1=RFC9112}}), the HTTP upgrade mechanism
 ({{HTTP-SEMANTICS}} Section 7.8) is used.
 
 The method of the issued request SHALL be "GET", accompanied by an
 "Upgrade: ptth" header field.
 
-The request MUST also include the ALPN header field ({{ALPN-HEADER=RFC7639}})
+The request MUST also include the ALPN header field ({{!ALPN-HEADER=RFC7639}})
 specifying the HTTP versions that the backend server is willing to use on the
 transposed connection.
 
@@ -123,7 +123,7 @@ transposed.
 
 ## HTTP/3
 
-In HTTP/3 ({{HTTP3=RFC9114}}), the OPTIONS method
+In HTTP/3 ({{!HTTP3=RFC9114}}), the OPTIONS method
 ({{Section 9.3.7 of HTTP-SEMANTICS}}) is used to transpose HTTP request flow on
 the HTTP/3 connection. As the flow of the existing connection is transposed,
 neither the `:protocol` pseudo-header field nor the ALPN header field is used.
