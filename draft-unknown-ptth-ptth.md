@@ -162,6 +162,21 @@ understandings are:
   to constrain the setup of a transposed _connection_ to hop-by-hop.
 
 
+# Establishing Authority
+
+In HTTP, only the URI's authority may process or delagate the request
+({{Section 17.1 of HTTP-SEMANTICS}}).
+
+Under PTTH, the reverse proxy exercises that authority: it authenticates
+backend servers using its configured scheme and forwards incoming requests
+over the transposed connections.
+
+
+# Security Considerations
+
+TODO
+
+
 # IANA Considerations
 
 Once approved, this document will request IANA to register the following entry
