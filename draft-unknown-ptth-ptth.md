@@ -134,7 +134,7 @@ packet reordering, backend servers might receive these requests before receiving
 a 200 response for the OPTIONS request.
 
 Similarly to when HTTP/1.1 is used, establishment of a new HTTP/3 connection is
-required when a transposed HTTP/3 connection with different set of parameters is
+required if a transposed HTTP/3 connection with different set of parameters is
 needed. Once the transposed connection is established, the reverse proxy SHOULD
 reset incoming requests that it receives using a H3_REQUEST_REJECTED error
 ({{Section 8.1 of HTTP3}}).
