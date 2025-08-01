@@ -1364,10 +1364,12 @@ way to constrain the setup of a transposed <em>connection</em> to hop-by-hop.<a 
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-establishing-authority" class="section-name selfRef">Establishing Authority</a>
       </h2>
 <p id="section-4-1">In HTTP, only the URI's authority may process or delegate the request
-(<span><a href="https://rfc-editor.org/rfc/rfc9110#section-17.1" class="relref">Section 17.1</a> of [<a href="#HTTP-SEMANTICS" class="cite xref">HTTP-SEMANTICS</a>]</span>).<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Under PTTH, the reverse proxy exercises that authority: it authenticates
-backend servers using its configured scheme and forwards incoming requests
-over the transposed connections.<a href="#section-4-2" class="pilcrow">¶</a></p>
+(<span><a href="https://rfc-editor.org/rfc/rfc9110#section-17.1" class="relref">Section 17.1</a> of [<a href="#HTTP-SEMANTICS" class="cite xref">HTTP-SEMANTICS</a>]</span>). A reverse proxy holds that authority.
+It authenticates the backend server using its chosen scheme and exersise its
+authority to forward client requests to the backend.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">This authority model of HTTP remains unchanged under PTTH; PTTH merely
+establishes the connection differently, by having the backend server initiate
+the HTTP channel to the reverse proxy.<a href="#section-4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
