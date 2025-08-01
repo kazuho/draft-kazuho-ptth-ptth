@@ -170,7 +170,7 @@ understandings are:
 
 # Establishing Authority
 
-In HTTP, only the URI's authority may process or delagate the request
+In HTTP, only the URI's authority may process or delegate the request
 ({{Section 17.1 of HTTP-SEMANTICS}}).
 
 Under PTTH, the reverse proxy exercises that authority: it authenticates
