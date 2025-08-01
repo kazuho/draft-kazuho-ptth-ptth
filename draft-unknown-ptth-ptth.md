@@ -69,8 +69,9 @@ Similarly, the authentication scheme is unspecified. Deployments can use either
 a TLS- or an HTTP-based authentication scheme, or something else.
 
 The method being used to establish the transposed connection is different
-between HTTP/1.1 and HTTP/3, while the header fields are agnostic to the HTTP
-versions being used.
+between HTTP versions. However, the HTTP header fields are version-independent,
+and therefore the parameters for negotiating PTTH can be defined in a
+version-neutral manner.
 
 PTTH cannot originate over HTTP/2. To establish a transposed HTTP/2 channel,
 HTTP/1.1 upgrade is used, with the ALPN specifying HTTP/2.
