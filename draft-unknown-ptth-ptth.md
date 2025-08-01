@@ -172,13 +172,18 @@ understandings are:
 # Establishing Authority
 
 In HTTP, only the URI's authority may process or delegate the request
-({{Section 17.1 of HTTP-SEMANTICS}}). A reverse proxy holds that authority.
-It authenticates the backend server using its chosen scheme and exersise its
-authority to forward client requests to the backend.
+({{Section 17.1 of HTTP-SEMANTICS}}).
 
-This authority model of HTTP remains unchanged under PTTH; PTTH merely
-establishes the connection differently, by having the backend server initiate
-the HTTP channel to the reverse proxy.
+This authority model of HTTP remains unchanged under PTTH:
+
+* When the backend server connects to the reverse proxy and requests the
+  transposition of the connection, the backend identifies the reverse proxy
+  using a target URI whose authority component identifies the reverse proxy.
+* When the reverse proxy forwards requests to the backend over a transposed
+  connection, it is merely exercising its rights as the authoritative server.
+  This behavior is identical to forwarding requests over connections the
+  reverse proxy initiated, using whatever authentication scheme it chooses.
+  PTTH differs only in how the backend connections are established.
 
 
 # Security Considerations
