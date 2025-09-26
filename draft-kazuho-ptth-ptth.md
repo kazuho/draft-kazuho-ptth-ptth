@@ -147,8 +147,7 @@ needed. Once the transposed connection is established, the reverse proxy SHOULD
 reset incoming requests that it receives using a H3_REQUEST_REJECTED error
 ({{Section 8.1 of HTTP3}}).
 
-TODO: Discuss the downsides of transposing an HTTP/3 connection. Kazuho's
-understandings are:
+TODO: Discuss the downsides of transposing an HTTP/3 connection; notes:
 
 * No issues with SETTINGS; none of the HTTP/3 settings are specific to clients
   or servers.
