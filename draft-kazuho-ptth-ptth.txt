@@ -2,14 +2,14 @@
 
 
 
-httpbis                                                           K. Oku
+httpbis                                                 奥 一穂 (K. Oku)
 Internet-Draft                                                    Fastly
-Intended status: Standards Track                           1 August 2025
-Expires: 2 February 2026
+Intended status: Standards Track                       26 September 2025
+Expires: 30 March 2026
 
 
              Protocol for Transposed Transactions over HTTP
-                     draft-unknown-ptth-ptth-latest
+                     draft-kazuho-ptth-ptth-latest
 
 Abstract
 
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 February 2026.
+   This Internet-Draft will expire on 30 March 2026.
 
 Copyright Notice
 
@@ -70,7 +70,7 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  The Protocol
-     3.1.  HTTP/1.1
+     3.1.  HTTP/1.1 and HTTP/2
      3.2.  HTTP/3
    4.  Establishing Authority
    5.  Security Considerations
@@ -135,12 +135,14 @@ Table of Contents
    PTTH cannot originate over HTTP/2.  To establish a transposed HTTP/2
    channel, HTTP/1.1 upgrade is used, with the ALPN specifying HTTP/2.
 
-3.1.  HTTP/1.1
+3.1.  HTTP/1.1 and HTTP/2
 
-   In HTTP/1.1 ([HTTP1]), the HTTP upgrade mechanism ([HTTP-SEMANTICS]
-   Section 7.8) is used.
+   To establish a transposed HTTP/1.1 or HTTP/2 channel, the backend
+   server connects to the reverse proxy using HTTP/1.1 ([HTTP1]), and
+   uses the HTTP upgrade mechanism ([HTTP-SEMANTICS] Section 7.8) to
+   negotiate the transposition.
 
-   The method of the issued request SHALL be "GET", accompanied by an
+   The method of the upgrade request SHALL be "GET", accompanied by an
    "Upgrade: ptth" header field.
 
    The request MUST also include the ALPN header field ([ALPN-HEADER])
@@ -153,7 +155,7 @@ Table of Contents
    chosen.  After a 101 response is sent, HTTP requests are sent in the
    direction from the reverse proxy to the backend server.
 
-   Figure 1 shows an exchange of HTTP/1.1 request and response
+   Figure 1 shows an exchange of HTTP/1.1 upgrade request and response
    establishing the transposed connection.  In this example, the Basic
    HTTP Authentication Scheme [BASIC-AUTH] is used to authenticate the
    backend server.  As for the application protocol to be used on the
@@ -199,13 +201,14 @@ Table of Contents
 
    Similarly to when HTTP/1.1 is used, establishment of a new HTTP/3
    connection is required if a transposed HTTP/3 connection with
-   different set of parameters is needed.  Once the transposed
-   connection is established, the reverse proxy SHOULD reset incoming
-   requests that it receives using a H3_REQUEST_REJECTED error
+   different set of parameters is needed.
+
+   Once the connection is transposed, the reverse proxy MAY reset
+   incoming requests that it receives using a H3_REQUEST_REJECTED error
    (Section 8.1 of [HTTP3]).
 
-   TODO: Discuss the downsides of transposing an HTTP/3 connection.
-   Kazuho's understandings are:
+   TODO: Discuss the downsides of transposing an HTTP/3 connection;
+   notes:
 
    *  No issues with SETTINGS; none of the HTTP/3 settings are specific
       to clients or servers.
@@ -318,3 +321,8 @@ Author's Address
    Kazuho Oku
    Fastly
    Email: kazuhooku@gmail.com
+
+   Additional contact information:
+
+      奥 一穂
+      Fastly
