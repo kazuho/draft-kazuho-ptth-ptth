@@ -77,12 +77,14 @@ PTTH cannot originate over HTTP/2. To establish a transposed HTTP/2 channel,
 HTTP/1.1 upgrade is used, with the ALPN specifying HTTP/2.
 
 
-## HTTP/1.1
+## HTTP/1.1 and HTTP/2
 
-In HTTP/1.1 ({{!HTTP1=RFC9112}}), the HTTP upgrade mechanism
-({{HTTP-SEMANTICS}} Section 7.8) is used.
+To establish a transposed HTTP/1.1 or HTTP/2 channel, the backend server
+connects to the reverse proxy using HTTP/1.1 ({{!HTTP1=RFC9112}}), and uses the
+HTTP upgrade mechanism ({{HTTP-SEMANTICS}} Section 7.8) to negotiate the
+transposition.
 
-The method of the issued request SHALL be "GET", accompanied by an
+The method of the upgrade request SHALL be "GET", accompanied by an
 "Upgrade: ptth" header field.
 
 The request MUST also include the ALPN header field ({{!ALPN-HEADER=RFC7639}})
@@ -95,8 +97,8 @@ header specifying the HTTP version being chosen. After a 101 response is sent,
 HTTP requests are sent in the direction from the reverse proxy to the backend
 server.
 
-{{fig-tunnel-establishment}} shows an exchange of HTTP/1.1 request and response
-establishing the transposed connection. In this example, the Basic HTTP
+{{fig-tunnel-establishment}} shows an exchange of HTTP/1.1 upgrade request and
+response establishing the transposed connection. In this example, the Basic HTTP
 Authentication Scheme {{?BASIC-AUTH=RFC7617}} is used to authenticate the
 backend server. As for the application protocol to be used on the transposed
 connection, the backend server is offering both HTTP/2 and HTTP/1.1, and the
