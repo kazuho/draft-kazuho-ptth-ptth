@@ -143,9 +143,10 @@ a 200 response for the OPTIONS request.
 
 Similarly to when HTTP/1.1 is used, establishment of a new HTTP/3 connection is
 required if a transposed HTTP/3 connection with different set of parameters is
-needed. Once the transposed connection is established, the reverse proxy SHOULD
-reset incoming requests that it receives using a H3_REQUEST_REJECTED error
-({{Section 8.1 of HTTP3}}).
+needed.
+
+Once the connection is transposed, the reverse proxy MAY reset incoming requests
+that it receives using a H3_REQUEST_REJECTED error ({{Section 8.1 of HTTP3}}).
 
 TODO: Discuss the downsides of transposing an HTTP/3 connection; notes:
 
