@@ -1,6 +1,6 @@
 ---
 title: "Protocol for Transposed Transactions over HTTP"
-docname: draft-unknown-ptth-ptth-latest
+docname: draft-kazuho-ptth-ptth-latest
 category: std
 wg: httpbis
 ipr: trust200902
