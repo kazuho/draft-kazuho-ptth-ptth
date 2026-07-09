@@ -15,12 +15,12 @@ Abstract
 
    This document specifies the Protocol for Transposed Transactions over
    HTTP (PTTH), an HTTP extension that allows a backend server to
-   establish an HTTP connection to a reverse proxy and transpose HTTP
-   request flow.  The reverse proxy then forwards incoming requests to
-   the backend server over the transposed connection.  This extension
+   establish an HTTP connection to a reverse proxy and transpose the
+   flow of HTTP requests.  The reverse proxy then sends requests to the
+   backend server over the resulting transposed channel.  This extension
    lets backend servers behind restrictive firewalls accept HTTP traffic
    through reverse proxies without changing firewall settings and with
-   virtually zero overhead.
+   minimal overhead.
 
 Discussion Venues
 
@@ -69,11 +69,14 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  The Protocol
-     3.1.  HTTP/1.1 and HTTP/2
+   3.  Establishing Transposed HTTP Channels
+     3.1.  HTTP/1 and HTTP/2
      3.2.  HTTP/3
-   4.  Establishing Authority
+   4.  Avoiding Encapsulation Overhead
+     4.1.  HTTP/1 and HTTP/2
+     4.2.  HTTP/3
    5.  Security Considerations
+     5.1.  Establishing Authority
    6.  IANA Considerations
    7.  References
      7.1.  Normative References
@@ -92,18 +95,28 @@ Table of Contents
    organizations use VPNs, but VPNs introduce operational complexity,
    hamper scalability, and impose performance overhead.
 
-   PTTH enables a backend server to establish an HTTP connection to a
-   reverse proxy and transpose the flow of HTTP requests so that the
-   proxy sends incoming requests back over the same connection.  An HTTP
-   request is used for authenticating the backend server and for
-   negotiating the scope of requests forwarded to the transposed
-   connection, providing flexibility to deployments.
+   PTTH lets a backend server establish an HTTP connection to a reverse
+   proxy and transpose the flow of HTTP requests, so that the reverse
+   proxy can send HTTP requests to the backend server.
 
-   Because PTTH transposes the direction of communication rather than
-   encapsulating traffic, it incurs virtually zero overhead and delivers
-   high efficiency.
+   PTTH has the following characteristics:
 
-   TODO: expand
+   *  *HTTP-based authentication:* the backend server authenticates
+      itself using an HTTP request, so deployments can reuse any
+      authentication scheme supported by HTTP.
+
+   *  *URI-based scoping:* the conditions that select which requests are
+      routed to a transposed channel can be expressed through the target
+      URI of the request that establishes the channel.
+
+   *  *Unmodified HTTP on the transposed channel:* because PTTH reverses
+      the roles of the HTTP client and server rather than defining a new
+      protocol, the transposed channel carries ordinary HTTP, and HTTP
+      extensions operate over it without modification.
+
+   *  *Minimal overhead:* the encapsulation that a transposed channel
+      would otherwise incur can be avoided, letting the channel use the
+      underlying transport directly.
 
 2.  Conventions and Definitions
 
@@ -113,54 +126,59 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  The Protocol
+3.  Establishing Transposed HTTP Channels
 
-   To set up a transposed connection, the backend server connects to the
-   reverse proxy and sends an HTTP request including a URI specifying
-   the transposed endpoint and credentials that authenticate the backend
-   server.
+   To establish a transposed HTTP channel, the backend server connects
+   to the reverse proxy and issues an extended CONNECT request
+   ([EXT-CONNECT]) — or, in HTTP/1.1, the equivalent HTTP Upgrade
+   ([HTTP-SEMANTICS] Section 7.8) — that both authenticates the backend
+   server and negotiates the transposition.  Although the way extended
+   CONNECT is expressed differs between HTTP versions, the accompanying
+   header fields do not.  The parameters for negotiating PTTH are
+   therefore defined in a version-neutral manner.
 
-   The exact form of the URI specifying the transposed endpoint is
-   unspecified; it is up to each reverse proxy deployment.
+   The exact form of the request target is unspecified; it is up to each
+   reverse proxy deployment.  Besides identifying the transposed
+   endpoint, the target can express the conditions that select which
+   requests the reverse proxy routes to the transposed channel.
+   Likewise, the authentication scheme is unspecified: deployments can
+   use a TLS- or an HTTP-based scheme, or something else.
 
-   Similarly, the authentication scheme is unspecified.  Deployments can
-   use either a TLS- or an HTTP-based authentication scheme, or
-   something else.
+   Once a transposed channel is established, HTTP requests flow from the
+   reverse proxy to the backend server: the reverse proxy acts as the
+   HTTP client and the backend server as the HTTP server on the
+   transposed channel.
 
-   The method being used to establish the transposed connection is
-   different between HTTP versions.  However, the HTTP header fields are
-   version-independent, and therefore the parameters for negotiating
-   PTTH can be defined in a version-neutral manner.
+3.1.  HTTP/1 and HTTP/2
 
-   PTTH cannot originate over HTTP/2.  To establish a transposed HTTP/2
-   channel, HTTP/1.1 upgrade is used, with the ALPN specifying HTTP/2.
+   To establish a transposed HTTP/1 or HTTP/2 channel, the backend
+   server issues extended CONNECT accompanied by the "ptth" token: in
+   HTTP/1.1 ([HTTP1]), a "GET" request carrying an "Upgrade: ptth"
+   header field; in HTTP/2, a CONNECT request carrying "ptth" in the
+   ":protocol" pseudo-header field.
 
-3.1.  HTTP/1.1 and HTTP/2
-
-   To establish a transposed HTTP/1.1 or HTTP/2 channel, the backend
-   server connects to the reverse proxy using HTTP/1.1 ([HTTP1]), and
-   uses the HTTP upgrade mechanism ([HTTP-SEMANTICS] Section 7.8) to
-   negotiate the transposition.
-
-   The method of the upgrade request SHALL be "GET", accompanied by an
-   "Upgrade: ptth" header field.
-
-   The request MUST also include the ALPN header field ([ALPN-HEADER])
+   The request MUST also carry the ALPN header field ([ALPN-HEADER])
    specifying the HTTP versions that the backend server is willing to
-   use on the transposed connection.
+   use on the transposed channel.
 
-   Once the transposed connection is established successfully, the
-   reverse proxy responds with a 101 (Switching Protocols) response,
-   alongside an ALPN response header specifying the HTTP version being
-   chosen.  After a 101 response is sent, HTTP requests are sent in the
-   direction from the reverse proxy to the backend server.
+   When the transposition succeeds, the reverse proxy returns a
+   successful response — a 101 (Switching Protocols) response in
+   HTTP/1.1, or a 2xx (Successful) response in HTTP/2 — carrying an ALPN
+   response header field that specifies the chosen HTTP version.  The
+   transposed channel is then carried directly over the resulting
+   bidirectional byte stream.
 
-   Figure 1 shows an exchange of HTTP/1.1 upgrade request and response
-   establishing the transposed connection.  In this example, the Basic
-   HTTP Authentication Scheme [BASIC-AUTH] is used to authenticate the
-   backend server.  As for the application protocol to be used on the
-   transposed connection, the backend server is offering both HTTP/2 and
-   HTTP/1.1, and the reverse proxy selects HTTP/2.
+   Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the
+   transposed HTTP protocol supplies its own framing and can exchange
+   metadata — through header fields, and in HTTP/2 through control
+   frames — so it already provides what capsules would.  Because HTTP/2
+   offers richer framing and metadata exchange than HTTP/1.1, HTTP/2 is
+   RECOMMENDED as the transposed protocol.
+
+   Figure 1 shows an HTTP/1.1 exchange establishing a transposed
+   channel.  Here the Basic HTTP Authentication Scheme [BASIC-AUTH]
+   authenticates the backend server, which offers both HTTP/2 and
+   HTTP/1.1; the reverse proxy selects HTTP/2.
 
    GET /reverse-endpoint HTTP/1.1
    Host: example.com
@@ -174,69 +192,90 @@ Table of Contents
    Upgrade: ptth
    ALPN: h2
 
-        Figure 1: Establishing a transposed connection over HTTP/1.1
-
-   As the parameters for the transposed connection are exchanged using
-   the upgrade request, they cannot be changed once the transposed
-   connection is established.  To change those parameters, a new
-   HTTP/1.1 connection should be established and transposed.
+         Figure 1: Establishing a transposed channel over HTTP/1.1
 
 3.2.  HTTP/3
 
-   In HTTP/3 ([HTTP3]), the OPTIONS method (Section 9.3.7 of
-   [HTTP-SEMANTICS]) is used to transpose HTTP request flow on the
-   HTTP/3 connection.  As the flow of the existing connection is
-   transposed, neither the :protocol pseudo-header field nor the ALPN
-   header field is used.
+   HTTP/3 ([HTTP3]) runs over QUIC ([QUIC]), whose underlying transport
+   is UDP.  A transposed HTTP/3 channel is therefore established as a
+   new HTTP/3 connection whose UDP flow is proxied over the setup
+   channel.
 
-   The target of the OPTIONS request is the endpoint that tranposes the
-   connection; therefore, the asterisk ("*") request is never used for
-   establishing PTTH.
+   To establish it, the backend server issues a CONNECT request carrying
+   "ptth-udp" in the ":protocol" pseudo-header field, together with an
+   ALPN header field specifying HTTP/3.  The new connection is initiated
+   by the reverse proxy toward the backend server; the reverse proxy is
+   thus the transport client as well as the HTTP client, and the backend
+   server the transport server as well as the HTTP server, so the
+   transposed connection is an ordinary HTTP/3 connection in which no
+   transport or stream roles are reversed.
 
-   Once the reverse proxy responds with a 2xx response, it starts
-   forwarding HTTP requests on the server-initiated, bidirectional QUIC
-   streams.  Note that, due to packet reordering, backend servers might
-   receive these requests before receiving a 200 response for the
-   OPTIONS request.
+   The UDP flow carrying the new connection is proxied over the setup
+   channel as datagrams encapsulated using the Capsule Protocol
+   ([CAPSULE]), as in Proxying UDP in HTTP ([CONNECT-UDP]).  Extensions
+   that optimize the proxying of UDP MAY be used to reduce this
+   overhead; see Section 4.2.
 
-   Similarly to when HTTP/1.1 is used, establishment of a new HTTP/3
-   connection is required if a transposed HTTP/3 connection with
-   different set of parameters is needed.
+   The new connection is authenticated with an external PSK
+   ([PSK-USAGE]) that both endpoints derive from the setup channel's TLS
+   connection using the exporter interface ([TLS13], Section 7.5), with
+   the label "ptth-udp", an empty context, and an output length equal to
+   the size of the hash of the cipher suite negotiated on the setup
+   channel.  That hash is also the PSK's associated hash function, and
+   the key is offered under the PSK identity "ptth-udp".  Because it is
+   bound to the already-authenticated setup channel, the new connection
+   requires no further authentication of the backend server.
 
-   Once the connection is transposed, the reverse proxy MAY reset
-   incoming requests that it receives using a H3_REQUEST_REJECTED error
-   (Section 8.1 of [HTTP3]).
+4.  Avoiding Encapsulation Overhead
 
-   TODO: Discuss the downsides of transposing an HTTP/3 connection;
-   notes:
+   The transposed channel established as described above is carried
+   within the setup connection: over HTTP/2 it is confined to a single
+   stream, and over HTTP/3 the new connection's packets are wrapped in
+   capsules and thereby encrypted twice.  This section describes, for
+   each case, how that encapsulation can be avoided so that the
+   transposed channel uses the underlying transport directly.
 
-   *  No issues with SETTINGS; none of the HTTP/3 settings are specific
-      to clients or servers.
+4.1.  HTTP/1 and HTTP/2
 
-   *  No issues with QPACK; one set of QPACK streams can handle requests
-      flying in both directions.
+   Extended CONNECT over HTTP/2 establishes the transposed channel
+   within a single bidirectional stream.  A transposed HTTP/2 channel
+   carried this way is multiplexed inside that one stream, adding a
+   layer of framing and confining the transposed channel to that
+   stream's flow-control window.
 
-   *  We need to consider how to handle quarter stream IDs of HTTP/3
-      datagrams; but that issue not orthogonal to sending HTTP requests
-      in both directions.  The issue arises for any design that
-      establishes the QUIC connection in the reverse direction.  Maybe
-      the answer here is to use stream_id / 4 + (2 << 60) as the quarter
-      stream IDs for datagrams belonging to the transposed requests.
+   Performing the setup over HTTP/1.1 avoids this.  The HTTP/1.1 Upgrade
+   hands over the entire connection rather than a single stream, so the
+   transposed channel is the connection itself; a transposed HTTP/2
+   channel then runs natively, with its streams mapped directly onto the
+   connection.
 
-   *  Otherwise, the design does not interfere with WebTransport over
-      HTTP/3; for both client- and server-initiated bidirectional
-      streams, WebTransport streams can be identified by their signal
-      vallues (0x41), and if they are associated to client- or server-
-      initiated requests can be determined by their Session ID (i.e.,
-      the stream ID of the CONNECT stream).
+   Because the transposed channel reuses the setup connection, it also
+   inherits that connection's TLS session: its authentication and
+   encryption carry over unchanged, and neither a pre-shared key nor any
+   additional authentication is required.
 
-   *  Rather than using OPTIONS, do we want to use an extended CONNECT?
-      While the use of OPTIONS might be fine, HTTP requests without a
-      special pseudo-header is end-to-end per definition.  Using an
-      extended CONNECT is a straightforward way to constrain the setup
-      of a transposed _connection_ to hop-by-hop.
+4.2.  HTTP/3
 
-4.  Establishing Authority
+   Proxying the transposed connection's packets as capsules encrypts
+   each packet twice: once by the transposed connection and again by the
+   setup channel.  Forwarded mode of QUIC-Aware Proxying ([QUIC-PROXY])
+   removes the second encryption.
+
+   In forwarded mode, the packets of the transposed connection are sent
+   over the same path as the setup channel but are not encapsulated
+   within it; the reverse proxy and the backend server identify them by
+   their QUIC connection IDs.  Each packet then carries only the
+   transposed connection's own encryption.
+
+   The packets of the transposed connection are exposed only on the path
+   between the backend server and the reverse proxy — the same path
+   already used by the setup channel.  Obfuscating their connection IDs
+   is therefore unnecessary, so those connection IDs can be used to
+   route the transposed connection's packets.
+
+5.  Security Considerations
+
+5.1.  Establishing Authority
 
    In HTTP, only the URI's authority may process or delegate the request
    (Section 17.1 of [HTTP-SEMANTICS]).
@@ -255,22 +294,41 @@ Table of Contents
       whatever authentication scheme it chooses.  PTTH differs only in
       how the backend connections are established.
 
-5.  Security Considerations
-
-   TODO
-
 6.  IANA Considerations
 
    Once approved, this document will request IANA to register the
-   following entry to the "HTTP Upgrade Tokens" registry maintained at
+   following entries to the "HTTP Upgrade Tokens" registry maintained at
    https://www.iana.org/assignments/http-upgrade-tokens
    (https://www.iana.org/assignments/http-upgrade-tokens):
 
    Value:  ptth
 
-   Description:  Establishes a transposed HTTP/1.1 connection.
+   Description:  Establishes a transposed HTTP channel that runs over a
+      byte stream.
 
    Expected Version Tokens:  None
+
+   Reference:  this document
+
+   Value:  ptth-udp
+
+   Description:  Establishes a transposed HTTP channel that runs over
+      UDP.
+
+   Expected Version Tokens:  None
+
+   Reference:  this document
+
+   This document also requests IANA to register the following entry in
+   the "TLS Exporter Labels" registry maintained at
+   https://www.iana.org/assignments/tls-parameters
+   (https://www.iana.org/assignments/tls-parameters):
+
+   Value:  ptth-udp
+
+   DTLS-OK:  N
+
+   Recommended:  Y
 
    Reference:  this document
 
@@ -282,6 +340,20 @@ Table of Contents
               Hutton, A., Uberti, J., and M. Thomson, "The ALPN HTTP
               Header Field", RFC 7639, DOI 10.17487/RFC7639, August
               2015, <https://www.rfc-editor.org/rfc/rfc7639>.
+
+   [CAPSULE]  Schinazi, D. and L. Pardue, "HTTP Datagrams and the
+              Capsule Protocol", RFC 9297, DOI 10.17487/RFC9297, August
+              2022, <https://www.rfc-editor.org/rfc/rfc9297>.
+
+   [CONNECT-UDP]
+              Schinazi, D., "Proxying UDP in HTTP", RFC 9298,
+              DOI 10.17487/RFC9298, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9298>.
+
+   [EXT-CONNECT]
+              McManus, P., "Bootstrapping WebSockets with HTTP/2",
+              RFC 8441, DOI 10.17487/RFC8441, September 2018,
+              <https://www.rfc-editor.org/rfc/rfc8441>.
 
    [HTTP1]    Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
               Ed., "HTTP/1.1", STD 99, RFC 9112, DOI 10.17487/RFC9112,
@@ -296,6 +368,11 @@ Table of Contents
               DOI 10.17487/RFC9110, June 2022,
               <https://www.rfc-editor.org/rfc/rfc9110>.
 
+   [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -305,12 +382,25 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [TLS13]    Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/rfc/rfc8446>.
+
 7.2.  Informative References
 
    [BASIC-AUTH]
               Reschke, J., "The 'Basic' HTTP Authentication Scheme",
               RFC 7617, DOI 10.17487/RFC7617, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7617>.
+
+   [PSK-USAGE]
+              Housley, R., Hoyland, J., Sethi, M., and C. A. Wood,
+              "Guidance for External Pre-Shared Key (PSK) Usage in TLS",
+              RFC 9257, DOI 10.17487/RFC9257, July 2022,
+              <https://www.rfc-editor.org/rfc/rfc9257>.
+
+   [QUIC-PROXY]
+              "*** BROKEN REFERENCE ***".
 
 Acknowledgments
 
