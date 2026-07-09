@@ -197,8 +197,7 @@ required.
 Proxying the transposed connection's packets as capsules encrypts each packet
 twice: once by the transposed connection and again by the setup channel.
 Forwarded mode of QUIC-Aware Proxying
-({{?QUIC-PROXY=I-D.ietf-masque-quic-aware-proxying}}) removes the second
-encryption.
+({{?QUIC-PROXY=I-D.ietf-masque-quic-proxy}}) removes the second encryption.
 
 In forwarded mode, the packets of the transposed connection are sent over the
 same path as the setup channel but are not encapsulated within it; the reverse
