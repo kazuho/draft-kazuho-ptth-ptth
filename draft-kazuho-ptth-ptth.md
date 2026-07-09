@@ -40,17 +40,28 @@ configuration to permit proxy-initiated traffic. To overcome these restrictions,
 some organizations use VPNs, but VPNs introduce operational complexity, hamper
 scalability, and impose performance overhead.
 
-PTTH enables a backend server to establish an HTTP connection to a reverse proxy
-and transpose the flow of HTTP requests so that the proxy sends incoming
-requests back over the same connection. An HTTP request is used for
-authenticating the backend server and for negotiating the scope of requests
-forwarded to the transposed connection, providing flexibility to deployments.
+PTTH lets a backend server establish an HTTP connection to a reverse proxy and
+transpose the flow of HTTP requests, so that the reverse proxy can send HTTP
+requests to the backend server.
 
-Because PTTH transposes the direction of communication rather than
-encapsulating traffic, it incurs virtually zero overhead and delivers high
-efficiency.
+PTTH has the following characteristics:
 
-TODO: expand
+* **HTTP-based authentication:** the backend server authenticates itself using
+  an HTTP request, so deployments can reuse any authentication scheme supported
+  by HTTP.
+
+* **URI-based scoping:** the conditions that select which requests are routed to
+  a transposed channel can be expressed through the target URI of the request
+  that establishes the channel.
+
+* **Unmodified HTTP on the transposed channel:** because PTTH reverses the roles
+  of the HTTP client and server rather than defining a new protocol, the
+  transposed channel carries ordinary HTTP, and HTTP extensions operate over it
+  without modification.
+
+* **Minimal overhead:** the encapsulation that a transposed channel would
+  otherwise incur can be avoided, letting the channel use the underlying
+  transport directly.
 
 
 # Conventions and Definitions
@@ -68,10 +79,11 @@ Although the way extended CONNECT is expressed differs between HTTP versions,
 the accompanying header fields do not. The parameters for negotiating PTTH are
 therefore defined in a version-neutral manner.
 
-The exact form of the request target identifying the transposed endpoint is
-unspecified; it is up to each reverse proxy deployment. Likewise, the
-authentication scheme is unspecified: deployments can use a TLS- or an
-HTTP-based scheme, or something else.
+The exact form of the request target is unspecified; it is up to each reverse
+proxy deployment. Besides identifying the transposed endpoint, the target can
+express the conditions that select which requests the reverse proxy routes to
+the transposed channel. Likewise, the authentication scheme is unspecified:
+deployments can use a TLS- or an HTTP-based scheme, or something else.
 
 Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
