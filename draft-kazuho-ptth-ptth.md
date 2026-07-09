@@ -94,8 +94,8 @@ backend server as the HTTP server on the transposed channel.
 To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
 extended CONNECT accompanied by the "ptth" token: in HTTP/1.1
 ({{!HTTP1=RFC9112}}), a "GET" request carrying an "Upgrade: ptth" header field;
-in HTTP/2, a CONNECT request carrying "ptth" in the ":protocol" pseudo-header
-field.
+in HTTP/2 ({{!HTTP2=RFC9113}}), a CONNECT request carrying "ptth" in the
+":protocol" pseudo-header field.
 
 The request MUST also carry the ALPN header field ({{!ALPN-HEADER=RFC7639}})
 specifying the HTTP versions that the backend server is willing to use on the
