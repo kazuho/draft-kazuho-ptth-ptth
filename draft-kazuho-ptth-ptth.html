@@ -1292,8 +1292,8 @@ backend server as the HTTP server on the transposed channel.<a href="#section-3-
 <p id="section-3.1-1">To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
 extended CONNECT accompanied by the "ptth" token: in HTTP/1.1
 (<span>[<a href="#HTTP1" class="cite xref">HTTP1</a>]</span>), a "GET" request carrying an "Upgrade: ptth" header field;
-in HTTP/2, a CONNECT request carrying "ptth" in the ":protocol" pseudo-header
-field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+in HTTP/2 (<span>[<a href="#HTTP2" class="cite xref">HTTP2</a>]</span>), a CONNECT request carrying "ptth" in the
+":protocol" pseudo-header field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">The request <span class="bcp14">MUST</span> also carry the ALPN header field (<span>[<a href="#ALPN-HEADER" class="cite xref">ALPN-HEADER</a>]</span>)
 specifying the HTTP versions that the backend server is willing to use on the
 transposed channel.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
@@ -1555,6 +1555,10 @@ Exporter Labels" registry maintained at
 <dt id="HTTP1">[HTTP1]</dt>
         <dd>
 <span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP/1.1"</span>, <span class="seriesInfo">STD 99</span>, <span class="seriesInfo">RFC 9112</span>, <span class="seriesInfo">DOI 10.17487/RFC9112</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9112">https://www.rfc-editor.org/rfc/rfc9112</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="HTTP2">[HTTP2]</dt>
+        <dd>
+<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">C. Benfield, Ed.</span>, <span class="refTitle">"HTTP/2"</span>, <span class="seriesInfo">RFC 9113</span>, <span class="seriesInfo">DOI 10.17487/RFC9113</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9113">https://www.rfc-editor.org/rfc/rfc9113</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="HTTP3">[HTTP3]</dt>
         <dd>
