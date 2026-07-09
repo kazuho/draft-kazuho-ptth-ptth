@@ -21,11 +21,11 @@ normative:
 
 This document specifies the Protocol for Transposed Transactions over HTTP
 (PTTH), an HTTP extension that allows a backend server to establish an HTTP
-connection to a reverse proxy and transpose HTTP request flow. The reverse
-proxy then forwards incoming requests to the backend server over the transposed
-connection. This extension lets backend servers behind restrictive firewalls
-accept HTTP traffic through reverse proxies without changing firewall settings
-and with virtually zero overhead.
+connection to a reverse proxy and transpose the flow of HTTP requests. The
+reverse proxy then sends requests to the backend server over the resulting
+transposed channel. This extension lets backend servers behind restrictive
+firewalls accept HTTP traffic through reverse proxies without changing firewall
+settings and with minimal overhead.
 
 
 --- middle
