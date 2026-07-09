@@ -109,10 +109,9 @@ Table of Contents
       routed to a transposed channel can be expressed through the target
       URI of the request that establishes the channel.
 
-   *  *Unmodified HTTP on the transposed channel:* because PTTH reverses
-      the roles of the HTTP client and server rather than defining a new
-      protocol, the transposed channel carries ordinary HTTP, and HTTP
-      extensions operate over it without modification.
+   *  *Unmodified HTTP on the transposed channel:* PTTH merely sets up
+      the transposed channel; HTTP runs over it unmodified, so HTTP
+      extensions can be used without modification.
 
    *  *Minimal overhead:* the encapsulation that a transposed channel
       would otherwise incur can be avoided, letting the channel use the
