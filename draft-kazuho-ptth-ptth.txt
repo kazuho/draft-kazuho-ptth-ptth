@@ -399,7 +399,11 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc9257>.
 
    [QUIC-PROXY]
-              "*** BROKEN REFERENCE ***".
+              Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
+              Proxying Using HTTP", Work in Progress, Internet-Draft,
+              draft-ietf-masque-quic-proxy-09, 6 July 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-masque-
+              quic-proxy-09>.
 
 Acknowledgments
 
