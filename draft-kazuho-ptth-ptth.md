@@ -14,6 +14,10 @@ author:
       ascii: Kazuho Oku
     organization: Fastly
     email: kazuhooku@gmail.com
+ -
+    fullname: Yaroslav Rosomakho
+    organization: Zscaler
+    email: yrosomakho@zscaler.com
 normative:
   HTTP-SEMANTICS: RFC9110
 
