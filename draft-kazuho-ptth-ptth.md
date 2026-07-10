@@ -88,14 +88,19 @@ Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
 backend server as the HTTP server on the transposed channel.
 
+The HTTP version that carries the extended CONNECT request and the HTTP version
+of the transposed channel are independent. The backend server can send an
+extended CONNECT request on any version of HTTP and establish a transposed HTTP
+channel of any HTTP version.
+
 
 ## HTTP/1 and HTTP/2
 
 To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
 extended CONNECT accompanied by the "ptth" token: in HTTP/1.1
 ({{!HTTP1=RFC9112}}), a "GET" request carrying an "Upgrade: ptth" header field;
-in HTTP/2 ({{!HTTP2=RFC9113}}), a CONNECT request carrying "ptth" in the
-":protocol" pseudo-header field.
+in HTTP/2 ({{!HTTP2=RFC9113}}) and HTTP/3 ({{!HTTP3=RFC9114}}), a CONNECT
+request carrying "ptth" in the ":protocol" pseudo-header field.
 
 The request MUST also carry the ALPN header field ({{!ALPN-HEADER=RFC7639}})
 specifying the HTTP versions that the backend server is willing to use on the
@@ -103,9 +108,9 @@ transposed channel.
 
 When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
-response in HTTP/2 — carrying an ALPN response header field that specifies the
-chosen HTTP version. The transposed channel is then carried directly over the
-resulting bidirectional byte stream.
+response in HTTP/2 and HTTP/3 — carrying an ALPN response header field that
+specifies the chosen HTTP version. The transposed channel is then carried
+directly over the resulting bidirectional byte stream.
 
 Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
 HTTP protocol supplies its own framing and can exchange metadata — through header
@@ -137,22 +142,28 @@ ALPN: h2
 
 ## HTTP/3
 
-HTTP/3 ({{!HTTP3=RFC9114}}) runs over QUIC ({{!QUIC=RFC9000}}), whose underlying
+HTTP/3 ({{HTTP3}}) runs over QUIC ({{!QUIC=RFC9000}}), whose underlying
 transport is UDP. A transposed HTTP/3 channel is therefore established as a new
 HTTP/3 connection whose UDP flow is proxied over the setup channel.
 
-To establish it, the backend server issues a CONNECT request carrying "ptth-udp"
-in the ":protocol" pseudo-header field, together with an ALPN header field
-specifying HTTP/3. The new connection is initiated by the reverse proxy toward
-the backend server; the reverse proxy is thus the transport client as well as
-the HTTP client, and the backend server the transport server as well as the HTTP
-server, so the transposed connection is an ordinary HTTP/3 connection in which no
-transport or stream roles are reversed.
+To establish it, the backend server issues an extended CONNECT request with a
+"ptth-udp" upgrade token, together with an ALPN header field specifying HTTP/3.
+The new connection is initiated by the reverse proxy toward the backend server;
+the reverse proxy is thus the client-side of the transposed connection as well
+as being the HTTP client, and the backend server is the server-side of the
+transposed connection as well as being the HTTP server, so the transposed
+connection is an ordinary HTTP/3 connection in which no transport or stream
+roles are reversed.
 
 The UDP flow carrying the new connection is proxied over the setup channel as
-datagrams encapsulated using the Capsule Protocol ({{!CAPSULE=RFC9297}}), as in
-Proxying UDP in HTTP ({{!CONNECT-UDP=RFC9298}}). Extensions that optimize the
-proxying of UDP MAY be used to reduce this overhead; see {{fwd}}.
+datagrams encapsulated using HTTP/3 Datagrams or capsules
+({{!CAPSULE=RFC9297}}), as in Proxying UDP in HTTP ({{!CONNECT-UDP=RFC9298}}).
+Therefore, while any version of HTTP can be used as the setup channel, using
+HTTP/3 as the setup channel provides the opportunity to use HTTP/3 Datagrams and
+avoid head-of-line blocking.
+
+To reduce the encapsulation overhead, extensions that optimize the proxying of
+UDP MAY also be used; see {{fwd}}.
 
 The new connection is authenticated with an external PSK
 ({{?PSK-USAGE=RFC9257}}) that both endpoints derive from the setup channel's TLS
@@ -176,10 +187,10 @@ avoided so that the transposed channel uses the underlying transport directly.
 
 ## HTTP/1 and HTTP/2
 
-Extended CONNECT over HTTP/2 establishes the transposed channel within a single
-bidirectional stream. A transposed HTTP/2 channel carried this way is
-multiplexed inside that one stream, adding a layer of framing and confining the
-transposed channel to that stream's flow-control window.
+Extended CONNECT over HTTP/2 or HTTP/3 establishes the transposed channel
+ within a single bidirectional stream. A transposed HTTP/2 channel carried this
+way is multiplexed inside that one stream, adding a layer of framing and
+confining the transposed channel to that stream's flow-control window.
 
 Performing the setup over HTTP/1.1 avoids this. The HTTP/1.1 Upgrade hands over
 the entire connection rather than a single stream, so the transposed channel is
@@ -194,9 +205,9 @@ required.
 
 ## HTTP/3 {#fwd}
 
-Proxying the transposed connection's packets as capsules encrypts each packet
-twice: once by the transposed connection and again by the setup channel.
-Forwarded mode of QUIC-Aware Proxying
+Proxying the transposed connection's packets as HTTP/3 Datagrams or capsules
+encrypts each packet twice: once by the transposed connection and again by the
+setup channel. Forwarded mode of QUIC-Aware Proxying
 ({{?QUIC-PROXY=I-D.ietf-masque-quic-proxy}}) removes the second encryption.
 
 In forwarded mode, the packets of the transposed connection are sent over the
