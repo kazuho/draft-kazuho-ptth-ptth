@@ -165,15 +165,21 @@ avoid head-of-line blocking.
 To reduce the encapsulation overhead, extensions that optimize the proxying of
 UDP MAY also be used; see {{fwd}}.
 
-The new connection is authenticated with an external PSK
-({{?PSK-USAGE=RFC9257}}) that both endpoints derive from the setup channel's TLS
-connection using the exporter interface ({{!TLS13=RFC8446}}, Section 7.5), with
-the label "ptth-udp", an empty context, and an output length equal to the size
-of the hash of the cipher suite negotiated on the setup channel. That hash is
-also the PSK's associated hash function, and the key is offered under the PSK
-identity "ptth-udp". Because it is bound to the already-authenticated setup
-channel, the new connection requires no further authentication of the backend
-server.
+For the QUIC handshake ({{?QUIC-TLS=RFC9001}}) of the new connection, an
+external PSK ({{Section 2.2 of !TLS13=RFC8446}}) is used, which both endpoints
+derive from the setup channel's TLS or QUIC connection using the exporter
+interface ({{Section 7.5 of TLS13}}), with the label "ptth-udp", an empty
+context, and an output length equal to the size of the hash of the cipher suite
+negotiated on the setup channel. That hash is also the PSK's associated hash
+function, and the key is offered under the PSK identity "ptth-udp".
+
+The purpose of this PSK is not to authenticate the backend server. Instead, it
+is used to let the QUIC connection, an always-encrypted transport, inherit the
+security context of the setup channel. When the reverse proxy returns a
+successful response to the extended CONNECT request, it has already validated
+the identity of the backend server as with ordinary HTTP requests, and has
+agreed to forward requests. Authentication of the backend server is unneeded
+after that point.
 
 
 # Avoiding Encapsulation Overhead
