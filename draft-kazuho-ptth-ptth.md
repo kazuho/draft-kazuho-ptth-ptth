@@ -187,7 +187,7 @@ after that point.
 
 The transposed channel established as described above is carried within the
 setup connection: over HTTP/2 it is confined to a single stream, and over HTTP/3
-the new connection's packets are wrapped in capsules and thereby encrypted
+the new connection's packets are wrapped as HTTP Datagrams and thereby encrypted
 twice. This section describes, for each case, how that encapsulation can be
 avoided so that the transposed channel uses the underlying transport directly.
 
