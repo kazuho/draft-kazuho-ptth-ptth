@@ -15,7 +15,15 @@ author:
     organization: Fastly
     email: kazuhooku@gmail.com
 normative:
-  HTTP-SEMANTICS: RFC9110
+  H1:
+    =: RFC9112
+    display: HTTP/1
+  H2:
+    =: RFC9113
+    display: HTTP/2
+  H3:
+    =: RFC9114
+    display: HTTP/3
 
 --- abstract
 
@@ -73,7 +81,7 @@ PTTH has the following characteristics:
 To establish a transposed HTTP channel, the backend server connects to the
 reverse proxy and issues an extended CONNECT request ({{!EXT-CONNECT=RFC8441}}
 and {{!EXT-CONNECT-H3=RFC9220}}) — or, in HTTP/1.1, the equivalent HTTP Upgrade
-({{HTTP-SEMANTICS}} Section 7.8) — that both authenticates the backend server
+({{Section 7.8 of ?HTTP-SEMANTICS=RFC9110}}) — that both authenticates the backend server
 and negotiates the transposition. Although the way extended CONNECT is expressed
 differs between HTTP versions, the accompanying header fields do not. The
 parameters for negotiating PTTH are therefore defined in a version-neutral
@@ -99,8 +107,8 @@ channel of any HTTP version.
 
 To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
 extended CONNECT accompanied by the "ptth" token: in HTTP/1.1
-({{!HTTP1=RFC9112}}), a "GET" request carrying an "Upgrade: ptth" header field;
-in HTTP/2 ({{!HTTP2=RFC9113}}) and HTTP/3 ({{!HTTP3=RFC9114}}), a CONNECT
+({{H1}}), a "GET" request carrying an "Upgrade: ptth" header field;
+in HTTP/2 ({{H2}}) and HTTP/3 ({{H3}}), a CONNECT
 request carrying "ptth" in the ":protocol" pseudo-header field.
 
 The request MUST also carry the ALPN header field ({{!ALPN-HEADER=RFC7639}})
@@ -143,7 +151,7 @@ ALPN: h2
 
 ## HTTP/3
 
-HTTP/3 ({{HTTP3}}) runs over QUIC ({{!QUIC=RFC9000}}), whose underlying
+HTTP/3 ({{H3}}) runs over QUIC ({{!QUIC=RFC9000}}), whose underlying
 transport is UDP. A transposed HTTP/3 channel is therefore established as a new
 HTTP/3 connection whose UDP flow is proxied over the setup channel.
 
@@ -167,9 +175,9 @@ To reduce the encapsulation overhead, extensions that optimize the proxying of
 UDP MAY also be used; see {{fwd}}.
 
 For the QUIC handshake ({{?QUIC-TLS=RFC9001}}) of the new connection, an
-external PSK ({{Section 2.2 of !TLS13=RFC8446}}) is used, which both endpoints
+external PSK ({{Section 2.2 of !TLS=I-D.ietf-tls-rfc8446bis}}) is used, which both endpoints
 derive from the setup channel's TLS or QUIC connection using the exporter
-interface ({{Section 7.5 of TLS13}}), with the label "ptth-udp", an empty
+interface ({{Section 7.5 of TLS}}), with the label "ptth-udp", an empty
 context, and an output length equal to the size of the hash of the cipher suite
 negotiated on the setup channel. That hash is also the PSK's associated hash
 function, and the key is offered under the PSK identity "ptth-udp".
