@@ -1363,15 +1363,20 @@ HTTP/3 as the setup channel provides the opportunity to use HTTP/3 Datagrams and
 avoid head-of-line blocking.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">To reduce the encapsulation overhead, extensions that optimize the proxying of
 UDP <span class="bcp14">MAY</span> also be used; see <a href="#fwd" class="auto internal xref">Section 4.2</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">The new connection is authenticated with an external PSK
-(<span>[<a href="#PSK-USAGE" class="cite xref">PSK-USAGE</a>]</span>) that both endpoints derive from the setup channel's TLS
-connection using the exporter interface (<span>[<a href="#TLS13" class="cite xref">TLS13</a>]</span>, Section 7.5), with
-the label "ptth-udp", an empty context, and an output length equal to the size
-of the hash of the cipher suite negotiated on the setup channel. That hash is
-also the PSK's associated hash function, and the key is offered under the PSK
-identity "ptth-udp". Because it is bound to the already-authenticated setup
-channel, the new connection requires no further authentication of the backend
-server.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">For the QUIC handshake (<span>[<a href="#QUIC-TLS" class="cite xref">QUIC-TLS</a>]</span>) of the new connection, an
+external PSK (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-2.2" class="relref">Section 2.2</a> of [<a href="#TLS13" class="cite xref">TLS13</a>]</span>) is used, which both endpoints
+derive from the setup channel's TLS or QUIC connection using the exporter
+interface (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-7.5" class="relref">Section 7.5</a> of [<a href="#TLS13" class="cite xref">TLS13</a>]</span>), with the label "ptth-udp", an empty
+context, and an output length equal to the size of the hash of the cipher suite
+negotiated on the setup channel. That hash is also the PSK's associated hash
+function, and the key is offered under the PSK identity "ptth-udp".<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">The purpose of this PSK is not to authenticate the backend server. Instead, it
+is used to let the QUIC connection, an always-encrypted transport, inherit the
+security context of the setup channel. When the reverse proxy returns a
+successful response to the extended CONNECT request, it has already validated
+the identity of the backend server as with ordinary HTTP requests, and has
+agreed to forward requests. Authentication of the backend server is unneeded
+after that point.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1608,13 +1613,13 @@ Exporter Labels" registry maintained at
         <dd>
 <span class="refAuthor">Reschke, J.</span>, <span class="refTitle">"The 'Basic' HTTP Authentication Scheme"</span>, <span class="seriesInfo">RFC 7617</span>, <span class="seriesInfo">DOI 10.17487/RFC7617</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7617">https://www.rfc-editor.org/rfc/rfc7617</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="PSK-USAGE">[PSK-USAGE]</dt>
-        <dd>
-<span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Hoyland, J.</span>, <span class="refAuthor">Sethi, M.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Guidance for External Pre-Shared Key (PSK) Usage in TLS"</span>, <span class="seriesInfo">RFC 9257</span>, <span class="seriesInfo">DOI 10.17487/RFC9257</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9257">https://www.rfc-editor.org/rfc/rfc9257</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="QUIC-PROXY">[QUIC-PROXY]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Rosenberg, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"QUIC-Aware Proxying Using HTTP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-masque-quic-proxy-09</span>, <time datetime="2026-07-06" class="refDate">6 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-09">https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="QUIC-TLS">[QUIC-TLS]</dt>
+      <dd>
+<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">S. Turner, Ed.</span>, <span class="refTitle">"Using TLS to Secure QUIC"</span>, <span class="seriesInfo">RFC 9001</span>, <span class="seriesInfo">DOI 10.17487/RFC9001</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9001">https://www.rfc-editor.org/rfc/rfc9001</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

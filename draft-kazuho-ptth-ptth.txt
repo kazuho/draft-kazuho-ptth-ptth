@@ -225,15 +225,23 @@ Table of Contents
    To reduce the encapsulation overhead, extensions that optimize the
    proxying of UDP MAY also be used; see Section 4.2.
 
-   The new connection is authenticated with an external PSK
-   ([PSK-USAGE]) that both endpoints derive from the setup channel's TLS
-   connection using the exporter interface ([TLS13], Section 7.5), with
-   the label "ptth-udp", an empty context, and an output length equal to
-   the size of the hash of the cipher suite negotiated on the setup
-   channel.  That hash is also the PSK's associated hash function, and
-   the key is offered under the PSK identity "ptth-udp".  Because it is
-   bound to the already-authenticated setup channel, the new connection
-   requires no further authentication of the backend server.
+   For the QUIC handshake ([QUIC-TLS]) of the new connection, an
+   external PSK (Section 2.2 of [TLS13]) is used, which both endpoints
+   derive from the setup channel's TLS or QUIC connection using the
+   exporter interface (Section 7.5 of [TLS13]), with the label "ptth-
+   udp", an empty context, and an output length equal to the size of the
+   hash of the cipher suite negotiated on the setup channel.  That hash
+   is also the PSK's associated hash function, and the key is offered
+   under the PSK identity "ptth-udp".
+
+   The purpose of this PSK is not to authenticate the backend server.
+   Instead, it is used to let the QUIC connection, an always-encrypted
+   transport, inherit the security context of the setup channel.  When
+   the reverse proxy returns a successful response to the extended
+   CONNECT request, it has already validated the identity of the backend
+   server as with ordinary HTTP requests, and has agreed to forward
+   requests.  Authentication of the backend server is unneeded after
+   that point.
 
 4.  Avoiding Encapsulation Overhead
 
@@ -408,18 +416,16 @@ Table of Contents
               RFC 7617, DOI 10.17487/RFC7617, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7617>.
 
-   [PSK-USAGE]
-              Housley, R., Hoyland, J., Sethi, M., and C. A. Wood,
-              "Guidance for External Pre-Shared Key (PSK) Usage in TLS",
-              RFC 9257, DOI 10.17487/RFC9257, July 2022,
-              <https://www.rfc-editor.org/rfc/rfc9257>.
-
    [QUIC-PROXY]
               Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
               Proxying Using HTTP", Work in Progress, Internet-Draft,
               draft-ietf-masque-quic-proxy-09, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-masque-
               quic-proxy-09>.
+
+   [QUIC-TLS] Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
+              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9001>.
 
 Acknowledgments
 
