@@ -210,15 +210,17 @@ encrypts each packet twice: once by the transposed connection and again by the
 setup channel. Forwarded mode of QUIC-Aware Proxying
 ({{?QUIC-PROXY=I-D.ietf-masque-quic-proxy}}) removes the second encryption.
 
-In forwarded mode, the packets of the transposed connection are sent over the
-same path as the setup channel but are not encapsulated within it; the reverse
-proxy and the backend server identify them by their QUIC connection IDs. Each
-packet then carries only the transposed connection's own encryption.
+In forwarded mode, short header packets of the transposed connection are sent
+over the same path as the setup channel but are not encapsulated within it; the
+reverse proxy and the backend server identify them by their QUIC connection IDs.
+Packet transforms ({{Section 4.3 of QUIC-PROXY}}) are unnecessary in PTTH,
+because the reverse proxy is itself an endpoint of the transposed connection;
+there is no additional link that passive attackers might observe to correlate.
 
-The packets of the transposed connection are exposed only on the path between
-the backend server and the reverse proxy — the same path already used by the
-setup channel. Obfuscating their connection IDs is therefore unnecessary, so
-those connection IDs can be used to route the transposed connection's packets.
+Endpoints can therefore send and receive the QUIC packets of the transposed
+connection directly on the network path of the setup connection, simply by
+swapping the Connection IDs to the Virtual Connection IDs assigned by the
+forwarded mode.
 
 
 # Security Considerations
