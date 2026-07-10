@@ -1270,12 +1270,13 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-establishing-transposed-htt" class="section-name selfRef">Establishing Transposed HTTP Channels</a>
       </h2>
 <p id="section-3-1">To establish a transposed HTTP channel, the backend server connects to the
-reverse proxy and issues an extended CONNECT request (<span>[<a href="#EXT-CONNECT" class="cite xref">EXT-CONNECT</a>]</span>)
-— or, in HTTP/1.1, the equivalent HTTP Upgrade (<span>[<a href="#HTTP-SEMANTICS" class="cite xref">HTTP-SEMANTICS</a>]</span> Section 7.8)
-— that both authenticates the backend server and negotiates the transposition.
-Although the way extended CONNECT is expressed differs between HTTP versions,
-the accompanying header fields do not. The parameters for negotiating PTTH are
-therefore defined in a version-neutral manner.<a href="#section-3-1" class="pilcrow">¶</a></p>
+reverse proxy and issues an extended CONNECT request (<span>[<a href="#EXT-CONNECT" class="cite xref">EXT-CONNECT</a>]</span>
+and <span>[<a href="#EXT-CONNECT-H3" class="cite xref">EXT-CONNECT-H3</a>]</span>) — or, in HTTP/1.1, the equivalent HTTP Upgrade
+(<span>[<a href="#HTTP-SEMANTICS" class="cite xref">HTTP-SEMANTICS</a>]</span> Section 7.8) — that both authenticates the backend server
+and negotiates the transposition. Although the way extended CONNECT is expressed
+differs between HTTP versions, the accompanying header fields do not. The
+parameters for negotiating PTTH are therefore defined in a version-neutral
+manner.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The exact form of the request target is unspecified; it is up to each reverse
 proxy deployment. Besides identifying the PTTH endpoint, the target can express
 the conditions that select which requests the reverse proxy routes to the
@@ -1567,6 +1568,10 @@ Exporter Labels" registry maintained at
 <dt id="EXT-CONNECT">[EXT-CONNECT]</dt>
         <dd>
 <span class="refAuthor">McManus, P.</span>, <span class="refTitle">"Bootstrapping WebSockets with HTTP/2"</span>, <span class="seriesInfo">RFC 8441</span>, <span class="seriesInfo">DOI 10.17487/RFC8441</span>, <time datetime="2018-09" class="refDate">September 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8441">https://www.rfc-editor.org/rfc/rfc8441</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="EXT-CONNECT-H3">[EXT-CONNECT-H3]</dt>
+        <dd>
+<span class="refAuthor">Hamilton, R.</span>, <span class="refTitle">"Bootstrapping WebSockets with HTTP/3"</span>, <span class="seriesInfo">RFC 9220</span>, <span class="seriesInfo">DOI 10.17487/RFC9220</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9220">https://www.rfc-editor.org/rfc/rfc9220</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="HTTP1">[HTTP1]</dt>
         <dd>
