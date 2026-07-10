@@ -1231,14 +1231,14 @@ requests to the backend server.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">PTTH has the following characteristics:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-4.1">
-          <p id="section-1-4.1.1"><strong>HTTP-based authentication:</strong> the backend server authenticates itself using
-an HTTP request, so deployments can reuse any authentication scheme supported
-by HTTP.<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.1.1"><strong>URI-based:</strong> the setup request's target URI identifies the PTTH endpoint
+and scopes which requests the reverse proxy forwards to the backend server.<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.2">
-          <p id="section-1-4.2.1"><strong>URI-based scoping:</strong> the conditions that select which requests are routed to
-a transposed channel can be expressed through the target URI of the request
-that establishes the channel.<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.2.1"><strong>Authorized like any HTTP request:</strong> the backend server asserts its identity
+— with a TLS client certificate, an HTTP authentication scheme, or otherwise —
+and the reverse proxy authenticates and authorizes the request just as it
+would any ordinary HTTP request.<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.3">
           <p id="section-1-4.3.1"><strong>Unmodified HTTP on the transposed channel:</strong> PTTH merely sets up the
@@ -1277,9 +1277,9 @@ Although the way extended CONNECT is expressed differs between HTTP versions,
 the accompanying header fields do not. The parameters for negotiating PTTH are
 therefore defined in a version-neutral manner.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The exact form of the request target is unspecified; it is up to each reverse
-proxy deployment. Besides identifying the transposed endpoint, the target can
-express the conditions that select which requests the reverse proxy routes to
-the transposed channel. Likewise, the authentication scheme is unspecified:
+proxy deployment. Besides identifying the PTTH endpoint, the target can express
+the conditions that select which requests the reverse proxy routes to the
+transposed channel. Likewise, the authentication scheme is unspecified:
 deployments can use a TLS- or an HTTP-based scheme, or something else.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
