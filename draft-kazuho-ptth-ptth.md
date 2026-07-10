@@ -109,7 +109,10 @@ request carrying "ptth" in the ":protocol" pseudo-header field.
 
 The request MUST also carry the ALPN header field ({{!ALPN-HEADER=RFC7639}})
 specifying the HTTP versions that the backend server is willing to use on the
-transposed channel.
+transposed channel. Valid ALPN identifiers include HTTP protocols that run
+directly over a byte stream, such as "h2" and "http/1.1", and HTTP/3 over QMux
+({{?HTTP3-QMUX=I-D.kazuho-httpbis-http3-over-qmux}}), identified by the "h3qx"
+ALPN identifier.
 
 When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
@@ -134,12 +137,12 @@ Host: example.com
 Connection: upgrade
 Upgrade: ptth
 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-ALPN: h2, http%2F1.1
+ALPN: h3qx, h2, http%2F1.1
 
 HTTP/1.1 101 Switching Protocols
 Connection: upgrade
 Upgrade: ptth
-ALPN: h2
+ALPN: h3qx
 
 ~~~
 {: #fig-establishment title="Establishing a transposed channel over HTTP/1.1"}
