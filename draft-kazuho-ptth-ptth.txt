@@ -4,8 +4,9 @@
 
 httpbis                                                 奥 一穂 (K. Oku)
 Internet-Draft                                                    Fastly
-Intended status: Standards Track                            10 July 2026
-Expires: 11 January 2027
+Intended status: Standards Track                            Y. Rosomakho
+Expires: 11 January 2027                                         Zscaler
+                                                            10 July 2026
 
 
              Protocol for Transposed Transactions over HTTP
@@ -82,7 +83,7 @@ Table of Contents
      7.1.  Normative References
      7.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -437,7 +438,7 @@ Acknowledgments
 
    TODO.
 
-Author's Address
+Authors' Addresses
 
    Kazuho Oku
    Fastly
@@ -447,3 +448,8 @@ Author's Address
 
       奥 一穂
       Fastly
+
+
+   Yaroslav Rosomakho
+   Zscaler
+   Email: yrosomakho@zscaler.com
