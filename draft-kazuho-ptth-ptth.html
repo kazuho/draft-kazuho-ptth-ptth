@@ -1306,7 +1306,10 @@ in HTTP/2 (<span>[<a href="#HTTP2" class="cite xref">HTTP2</a>]</span>) and HTTP
 request carrying "ptth" in the ":protocol" pseudo-header field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">The request <span class="bcp14">MUST</span> also carry the ALPN header field (<span>[<a href="#ALPN-HEADER" class="cite xref">ALPN-HEADER</a>]</span>)
 specifying the HTTP versions that the backend server is willing to use on the
-transposed channel.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+transposed channel. Valid ALPN identifiers include HTTP protocols that run
+directly over a byte stream, such as "h2" and "http/1.1", and HTTP/3 over QMux
+(<span>[<a href="#HTTP3-QMUX" class="cite xref">HTTP3-QMUX</a>]</span>), identified by the "h3qx"
+ALPN identifier.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
 response in HTTP/2 and HTTP/3 — carrying an ALPN response header field that
@@ -1330,12 +1333,12 @@ Host: example.com
 Connection: upgrade
 Upgrade: ptth
 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-ALPN: h2, http%2F1.1
+ALPN: h3qx, h2, http%2F1.1
 
 HTTP/1.1 101 Switching Protocols
 Connection: upgrade
 Upgrade: ptth
-ALPN: h2
+ALPN: h3qx
 
 </pre>
 </div>
@@ -1622,6 +1625,10 @@ Exporter Labels" registry maintained at
 <dt id="BASIC-AUTH">[BASIC-AUTH]</dt>
         <dd>
 <span class="refAuthor">Reschke, J.</span>, <span class="refTitle">"The 'Basic' HTTP Authentication Scheme"</span>, <span class="seriesInfo">RFC 7617</span>, <span class="seriesInfo">DOI 10.17487/RFC7617</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7617">https://www.rfc-editor.org/rfc/rfc7617</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="HTTP3-QMUX">[HTTP3-QMUX]</dt>
+        <dd>
+<span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Pardue, L.</span>, and <span class="refAuthor">J. Iyengar</span>, <span class="refTitle">"HTTP/3 over QMux"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kazuho-httpbis-http3-over-qmux-00</span>, <time datetime="2026-06-25" class="refDate">25 June 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kazuho-httpbis-http3-over-qmux-00">https://datatracker.ietf.org/doc/html/draft-kazuho-httpbis-http3-over-qmux-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-PROXY">[QUIC-PROXY]</dt>
         <dd>

@@ -165,7 +165,10 @@ Table of Contents
 
    The request MUST also carry the ALPN header field ([ALPN-HEADER])
    specifying the HTTP versions that the backend server is willing to
-   use on the transposed channel.
+   use on the transposed channel.  Valid ALPN identifiers include HTTP
+   protocols that run directly over a byte stream, such as "h2" and
+   "http/1.1", and HTTP/3 over QMux ([HTTP3-QMUX]), identified by the
+   "h3qx" ALPN identifier.
 
    When the transposition succeeds, the reverse proxy returns a
    successful response — a 101 (Switching Protocols) response in
@@ -191,12 +194,12 @@ Table of Contents
    Connection: upgrade
    Upgrade: ptth
    Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-   ALPN: h2, http%2F1.1
+   ALPN: h3qx, h2, http%2F1.1
 
    HTTP/1.1 101 Switching Protocols
    Connection: upgrade
    Upgrade: ptth
-   ALPN: h2
+   ALPN: h3qx
 
          Figure 1: Establishing a transposed channel over HTTP/1.1
 
@@ -422,6 +425,13 @@ Table of Contents
               Reschke, J., "The 'Basic' HTTP Authentication Scheme",
               RFC 7617, DOI 10.17487/RFC7617, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7617>.
+
+   [HTTP3-QMUX]
+              Oku, K., Pardue, L., and J. Iyengar, "HTTP/3 over QMux",
+              Work in Progress, Internet-Draft, draft-kazuho-httpbis-
+              http3-over-qmux-00, 25 June 2026,
+              <https://datatracker.ietf.org/doc/html/draft-kazuho-
+              httpbis-http3-over-qmux-00>.
 
    [QUIC-PROXY]
               Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
