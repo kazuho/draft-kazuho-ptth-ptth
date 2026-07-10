@@ -1417,10 +1417,9 @@ setup channel. Forwarded mode of QUIC-Aware Proxying
 <p id="section-4.2-2">In forwarded mode, short header packets of the transposed connection are sent
 over the same path as the setup channel but are not encapsulated within it; the
 reverse proxy and the backend server identify them by their QUIC connection IDs.
-Packet transforms (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-09#section-4.3" class="relref">Section 4.3</a> of [<a href="#QUIC-PROXY" class="cite xref">QUIC-PROXY</a>]</span>) are unnecessary,
-because in PTTH the reverse proxy is itself an endpoint of the transposed
-connection; there is no additional link that passive attackers might observe to
-correlate.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+Packet transforms (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-09#section-4.3" class="relref">Section 4.3</a> of [<a href="#QUIC-PROXY" class="cite xref">QUIC-PROXY</a>]</span>) are unnecessary in PTTH,
+because the reverse proxy is itself an endpoint of the transposed connection;
+there is no additional link that passive attackers might observe to correlate.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">Endpoints can therefore send and receive the QUIC packets of the transposed
 connection directly on the network path of the setup connection, simply by
 swapping the Connection IDs to the Virtual Connection IDs assigned by the

@@ -274,7 +274,7 @@ Table of Contents
    are sent over the same path as the setup channel but are not
    encapsulated within it; the reverse proxy and the backend server
    identify them by their QUIC connection IDs.  Packet transforms
-   (Section 4.3 of [QUIC-PROXY]) are unnecessary, because in PTTH the
+   (Section 4.3 of [QUIC-PROXY]) are unnecessary in PTTH, because the
    reverse proxy is itself an endpoint of the transposed connection;
    there is no additional link that passive attackers might observe to
    correlate.
