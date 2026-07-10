@@ -71,12 +71,13 @@ PTTH has the following characteristics:
 # Establishing Transposed HTTP Channels
 
 To establish a transposed HTTP channel, the backend server connects to the
-reverse proxy and issues an extended CONNECT request ({{!EXT-CONNECT=RFC8441}})
-— or, in HTTP/1.1, the equivalent HTTP Upgrade ({{HTTP-SEMANTICS}} Section 7.8)
-— that both authenticates the backend server and negotiates the transposition.
-Although the way extended CONNECT is expressed differs between HTTP versions,
-the accompanying header fields do not. The parameters for negotiating PTTH are
-therefore defined in a version-neutral manner.
+reverse proxy and issues an extended CONNECT request ({{!EXT-CONNECT=RFC8441}}
+and {{!EXT-CONNECT-H3=RFC9220}}) — or, in HTTP/1.1, the equivalent HTTP Upgrade
+({{HTTP-SEMANTICS}} Section 7.8) — that both authenticates the backend server
+and negotiates the transposition. Although the way extended CONNECT is expressed
+differs between HTTP versions, the accompanying header fields do not. The
+parameters for negotiating PTTH are therefore defined in a version-neutral
+manner.
 
 The exact form of the request target is unspecified; it is up to each reverse
 proxy deployment. Besides identifying the PTTH endpoint, the target can express
