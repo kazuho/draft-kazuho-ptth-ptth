@@ -46,13 +46,13 @@ requests to the backend server.
 
 PTTH has the following characteristics:
 
-* **HTTP-based authentication:** the backend server authenticates itself using
-  an HTTP request, so deployments can reuse any authentication scheme supported
-  by HTTP.
+* **URI-based:** the setup request's target URI identifies the PTTH endpoint
+  and scopes which requests the reverse proxy forwards to the backend server.
 
-* **URI-based scoping:** the conditions that select which requests are routed to
-  a transposed channel can be expressed through the target URI of the request
-  that establishes the channel.
+* **Authorized like any HTTP request:** the backend server asserts its identity
+  — with a TLS client certificate, an HTTP authentication scheme, or otherwise —
+  and the reverse proxy authenticates and authorizes the request just as it
+  would any ordinary HTTP request.
 
 * **Unmodified HTTP on the transposed channel:** PTTH merely sets up the
   transposed channel; HTTP runs over it unmodified, so HTTP extensions can be
@@ -79,9 +79,9 @@ the accompanying header fields do not. The parameters for negotiating PTTH are
 therefore defined in a version-neutral manner.
 
 The exact form of the request target is unspecified; it is up to each reverse
-proxy deployment. Besides identifying the transposed endpoint, the target can
-express the conditions that select which requests the reverse proxy routes to
-the transposed channel. Likewise, the authentication scheme is unspecified:
+proxy deployment. Besides identifying the PTTH endpoint, the target can express
+the conditions that select which requests the reverse proxy routes to the
+transposed channel. Likewise, the authentication scheme is unspecified:
 deployments can use a TLS- or an HTTP-based scheme, or something else.
 
 Once a transposed channel is established, HTTP requests flow from the reverse
