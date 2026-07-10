@@ -79,11 +79,12 @@ differs between HTTP versions, the accompanying header fields do not. The
 parameters for negotiating PTTH are therefore defined in a version-neutral
 manner.
 
-The exact form of the request target is unspecified; it is up to each reverse
-proxy deployment. Besides identifying the PTTH endpoint, the target can express
-the conditions that select which requests the reverse proxy routes to the
-transposed channel. Likewise, the authentication scheme is unspecified:
-deployments can use a TLS- or an HTTP-based scheme, or something else.
+The target URI of the establishment request is constructed from the URI
+Template described in {{client-config}}. Besides identifying the PTTH endpoint,
+the target URI identifies the backend origin for which the backend server is
+registering a transposed channel. Likewise, the authentication scheme is
+unspecified: deployments can use a TLS- or an HTTP-based scheme, or something
+else.
 
 Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
@@ -94,6 +95,78 @@ of the transposed channel are independent. The backend server can send an
 extended CONNECT request on any version of HTTP and establish a transposed HTTP
 channel of any HTTP version.
 
+## Client Configuration {#client-config}
+
+Backend servers are configured to use a reverse proxy with a URI Template
+({{!URI-TEMPLATE=RFC6570}}) that describes the target URI of the PTTH establishment
+request. The URI Template identifies the reverse proxy and carries the backend
+origin for which the backend server is registering a transposed channel.
+
+The following examples show URI Templates for registering PTTH channels:
+
+~~~
+https://proxy.example.org/.well-known/ptth/{backend_scheme}/{backend_authority}/
+https://proxy.example.org:4443/ptth?s={backend_scheme}&a={backend_authority}
+https://proxy.example.org:4443/ptth{?backend_scheme,backend_authority}
+~~~
+{: #fig-uri-template title="URI Template Examples"}
+
+The following requirements apply to the URI Template:
+
+* The URI Template MUST be a level 3 template or lower.
+* The URI Template MUST be in absolute form and MUST include non-empty scheme,
+  authority, and path components.
+* The path component of the URI Template MUST start with a slash ("/").
+* All template variables MUST be within the path or query components of the URI.
+* The URI Template MUST contain the variables "backend_scheme" and
+  "backend_authority" and MAY contain other variables.
+* The URI Template MUST NOT contain any non-ASCII Unicode characters and MUST
+  only contain ASCII characters in the range 0x21-0x7E inclusive.
+* The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
+  Expansion ("#" operator), Label Expansion with Dot-Prefix, Path Segment
+  Expansion with Slash-Prefix, or Path-Style Parameter Expansion with
+  Semicolon-Prefix.
+
+Backend servers SHOULD validate the requirements above. However, a backend
+server MAY use a general-purpose URI Template implementation that does not
+perform PTTH-specific validation. If a backend server detects that any of the
+requirements above are not met by a URI Template, it MUST reject its
+configuration and abort the request without sending it to the reverse proxy.
+
+The "backend_scheme" and "backend_authority" variables identify the backend
+origin being registered. The "backend_scheme" variable contains the scheme of
+the backend origin. The "backend_authority" variable contains the authority of
+the backend origin, consisting of a host and, optionally, a port. The authority
+MUST NOT contain userinfo. If the authority includes a port, the colon (":")
+preceding the port is part of the "backend_authority" value before URI Template
+expansion, but is percent-encoded when represented in the resulting target URI.
+For example, the backend authority "backend.example.com:8443" is represented as
+"backend.example.com%3A8443" in the expanded URI. If the authority does not
+include a port, the default port for "backend_scheme" is implied.
+
+Using the terms "scheme", "host", and "port" from {{Section 3 of !URI=RFC3986}}, these variables
+adhere to the following format:
+
+~~~ abnf
+backend_scheme    = scheme
+backend_authority = host [ ":" port ]
+~~~
+{: #fig-origin-vars title="URI Template Variable Format"}
+
+When sending a PTTH establishment request, the backend server MUST perform URI
+Template expansion using "backend_scheme" and "backend_authority" from the
+backend origin it is registering.
+
+Backend server implementations that are constrained to configuring only the
+reverse proxy host and port MAY attempt to use the following default template:
+
+~~~
+https://$PROXY_HOST:$PROXY_PORT/.well-known/ptth/{backend_scheme}/{backend_authority}/
+~~~
+
+where $PROXY_HOST and $PROXY_PORT are the configured host and port of the
+reverse proxy, respectively. PTTH deployments SHOULD offer service at this
+location if they need to interoperate with such backend servers.
 
 ## HTTP/1 and HTTP/2
 
@@ -125,8 +198,8 @@ authenticates the backend server, which offers both HTTP/2 and HTTP/1.1; the
 reverse proxy selects HTTP/2.
 
 ~~~
-GET /reverse-endpoint HTTP/1.1
-Host: example.com
+GET /.well-known/ptth/https/backend.example.com/ HTTP/1.1
+Host: proxy.example.com
 Connection: upgrade
 Upgrade: ptth
 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
@@ -249,8 +322,16 @@ This authority model of HTTP remains unchanged under PTTH:
   reverse proxy initiated, using whatever authentication scheme it chooses.
   PTTH differs only in how the backend connections are established.
 
+Accepting a PTTH establishment request does more than authenticate the backend
+server. It authorizes that backend server to receive requests for the backend
+origin identified by the request target. A reverse proxy MUST therefore verify
+that the authenticated backend server is authorized to register the requested
+backend origin before accepting the request.
+
 
 # IANA Considerations
+
+## HTTP Upgrade Token
 
 Once approved, this document will request IANA to register the following entries
 to the "HTTP Upgrade Tokens" registry maintained at
@@ -280,7 +361,9 @@ Expected Version Tokens:
 Reference:
 : this document
 
-This document also requests IANA to register the following entry in the "TLS
+## TLS Exporter Label
+
+Once approved, this document will request IANA to register the following entry in the "TLS
 Exporter Labels" registry maintained at
 <https://www.iana.org/assignments/tls-parameters>:
 
@@ -296,6 +379,22 @@ Recommended:
 Reference:
 : this document
 
+## Well-Known URI
+
+Once approved, this document will request IANA to register the
+following entry in the "Well-Known URIs" registry maintained at <https://www.iana.org/assignments/well-known-uris>:
+
+URI Suffix:
+: ptth
+
+Reference:
+: this document
+
+Status:
+: permanent
+
+Change Controller:
+: IETF
 
 --- back
 
