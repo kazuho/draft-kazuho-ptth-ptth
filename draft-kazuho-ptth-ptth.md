@@ -113,10 +113,10 @@ specifies the chosen HTTP version. The transposed channel is then carried
 directly over the resulting bidirectional byte stream.
 
 Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
-HTTP protocol supplies its own framing and can exchange metadata — through header
-fields, and in HTTP/2 through control frames — so it already provides what
-capsules would. Because HTTP/2 offers richer framing and metadata exchange than
-HTTP/1.1, HTTP/2 is RECOMMENDED as the transposed protocol.
+HTTP protocol supplies its own framing and can exchange metadata — through
+header fields, and in HTTP/2 through control frames — so it already provides
+what capsules would. Because HTTP/2 offers richer framing and metadata exchange
+than HTTP/1.1, HTTP/2 is RECOMMENDED as the transposed protocol.
 
 {{fig-establishment}} shows an HTTP/1.1 exchange establishing a transposed
 channel. Here the Basic HTTP Authentication Scheme {{?BASIC-AUTH=RFC7617}}
@@ -193,10 +193,10 @@ avoided so that the transposed channel uses the underlying transport directly.
 
 ## HTTP/1 and HTTP/2
 
-Extended CONNECT over HTTP/2 or HTTP/3 establishes the transposed channel
- within a single bidirectional stream. A transposed HTTP/2 channel carried this
-way is multiplexed inside that one stream, adding a layer of framing and
-confining the transposed channel to that stream's flow-control window.
+Extended CONNECT over HTTP/2 or HTTP/3 establishes the transposed channel within
+a single bidirectional stream. A transposed HTTP/2 channel carried this way is
+multiplexed inside that one stream, adding a layer of framing and confining the
+transposed channel to that stream's flow-control window.
 
 Performing the setup over HTTP/1.1 avoids this. The HTTP/1.1 Upgrade hands over
 the entire connection rather than a single stream, so the transposed channel is
