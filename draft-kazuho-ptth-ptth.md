@@ -125,14 +125,17 @@ ALPN identifier.
 When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
 response in HTTP/2 and HTTP/3 — carrying an ALPN response header field that
-specifies the chosen HTTP version. The transposed channel is then carried
-directly over the resulting bidirectional byte stream.
+specifies the chosen HTTP version. HTTP of that version is then carried over the
+resulting bidirectional byte stream in the clear without TLS; its
+confidentiality and integrity are provided by the setup channel's encryption.
+When HTTP/2 is selected, it is started by the reverse proxy sending a connection
+preface ({{Section 3.3 of H2}}).
 
 Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
-HTTP protocol supplies its own framing and can exchange metadata — through
-header fields, and in HTTP/2 through control frames — so it already provides
-what capsules would. Because HTTP/2 offers richer framing and metadata exchange
-than HTTP/1.1, HTTP/2 is RECOMMENDED as the transposed protocol.
+HTTP protocol supplies its own framing and can exchange metadata such as the
+intent to shut down the connection. Because HTTP/2 offers cleaner framing and
+metadata exchange than HTTP/1.1, HTTP/2 is RECOMMENDED as the transposed
+protocol.
 
 {{fig-establishment}} shows an HTTP/1.1 exchange establishing a transposed
 channel. Here the Basic HTTP Authentication Scheme {{?BASIC-AUTH=RFC7617}}
