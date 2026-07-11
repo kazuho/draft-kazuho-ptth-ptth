@@ -174,17 +174,16 @@ Table of Contents
    successful response — a 101 (Switching Protocols) response in
    HTTP/1.1, or a 2xx (Successful) response in HTTP/2 and HTTP/3 —
    carrying an ALPN response header field that specifies the chosen HTTP
-   version.  HTTP of that version is then carried over the resulting
-   bidirectional byte stream in the clear without TLS; its
-   confidentiality and integrity are provided by the setup channel's
-   encryption.  When HTTP/2 is selected, it is started by the reverse
+   version.  HTTP of that version is then carried directly over the
+   resulting bidirectional byte stream, with neither TLS nor capsules:
+   its confidentiality and integrity are provided by the setup channel's
+   encryption, and the transposed HTTP protocol supplies its own framing
+   and can exchange metadata such as the intent to shut down the
+   connection.  When HTTP/2 is selected, it is started by the reverse
    proxy sending a connection preface (Section 3.3 of [HTTP/2]).
 
-   Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the
-   transposed HTTP protocol supplies its own framing and can exchange
-   metadata such as the intent to shut down the connection.  Because
-   HTTP/2 offers cleaner framing and metadata exchange than HTTP/1.1,
-   HTTP/2 is RECOMMENDED as the transposed protocol.
+   Because HTTP/2 offers cleaner framing and metadata exchange than
+   HTTP/1.1, HTTP/2 is RECOMMENDED as the transposed protocol.
 
    Figure 1 shows an HTTP/1.1 exchange establishing a transposed
    channel.  Here the Basic HTTP Authentication Scheme [BASIC-AUTH]
