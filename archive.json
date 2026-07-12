@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-09T01:51:58.898712+00:00",
+  "timestamp": "2026-07-12T01:42:15.344732+00:00",
   "repo": "kazuho/draft-kazuho-ptth-ptth",
   "labels": [
     {
@@ -50,5 +50,264 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOPVzIEM7wTGwt",
+      "title": "Added Client Configuration section, template and well-known URI",
+      "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/1",
+      "state": "OPEN",
+      "author": "yaroslavros",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-10T18:22:11Z",
+      "updatedAt": "2026-07-10T23:54:23Z",
+      "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "baseRefName": "main",
+      "baseRefOid": "c3332da37aa7298343fdd7b0d61c7ed2897061ac",
+      "headRepository": "yaroslavros/draft-kazuho-ptth-ptth",
+      "headRefName": "backend-origin",
+      "headRefOid": "4949f1448d0e3f18b7d9c07ce6721262eaf79db3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFq4IBg",
+          "commit": {
+            "abbreviatedOid": "4949f14"
+          },
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "Thank you for the PR!",
+          "createdAt": "2026-07-10T23:00:26Z",
+          "updatedAt": "2026-07-10T23:42:40Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "How about something like below? It makes sense to use an URI Template / well-known URI if the scope of the delegation is in a specific form (e.g., origin, authority). However, it could be something else: e.g. a config ID. I do not think there is a reason to restrict the form of the URI in such cases.\n\n```suggestion\nThe target URI of the request identifies the PTTH endpoint and the scope of\nrequests that the reverse proxy forwards to the backend server over the\ntransposed channel. When that scope is an origin ({{!WEB-ORIGIN=RFC6454}}), the\nwell-known URI defined in {{client-config}} is used. When the scope is\nexpressed by other means, such as a configuration identifier, the target URI is\nleft to the deployment.\n\nThe authentication scheme is unspecified: deployments can use a TLS- or an\nHTTP-based scheme, or something else.\n```",
+              "createdAt": "2026-07-10T23:00:26Z",
+              "updatedAt": "2026-07-10T23:42:40Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "Instead of scheme and authority, how about using serialized_origin defined in [Section 7.1 of RFC 6454](https://datatracker.ietf.org/doc/html/rfc6454#section-7.1); e.g. `https://proxy.example.org/.well-known/ptth/{serialized_origin}`.\n\nThe benefit of using serialized_origin is that we could avoid specifying how to handle the request when either scheme or authority is omitted, as well as handling of userinfo.\n\nIn addition, use of serialized_origin allow endpoints specify multiple origins, if we want the capability to do so:\n```\nhttps://proxy.example.org/custom-ptth?o=https://example.com&o=https://example.org  # both .com and .org\nhttps://proxy.example.org/custom-ptth?o=http://example.com&o=https://example.com   # both cleartext HTTP and HTTPS\n```",
+              "createdAt": "2026-07-10T23:19:03Z",
+              "updatedAt": "2026-07-10T23:42:40Z"
+            },
+            {
+              "originalPosition": 116,
+              "body": ":+1:",
+              "createdAt": "2026-07-10T23:20:02Z",
+              "updatedAt": "2026-07-10T23:42:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFrEfPQ",
+          "commit": {
+            "abbreviatedOid": "4949f14"
+          },
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-10T23:54:23Z",
+          "updatedAt": "2026-07-10T23:54:23Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "Sorry here also.\n\n```suggestion\n## Client Configuration {#client-config}\n\nWhen backend servers are configured to receive forwarded requests scoped by an\norigin, they use a target URI built from a URI Template\n({{!URI-TEMPLATE=RFC6570}}) to establish a transposed channel. The URI Template\nidentifies the reverse proxy and the origin for which the backend server is\nregistering a transposed channel.\n```",
+              "createdAt": "2026-07-10T23:54:23Z",
+              "updatedAt": "2026-07-10T23:54:23Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOPVzIEM7wTTAf",
+      "title": "Add h3qx",
+      "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/2",
+      "state": "MERGED",
+      "author": "yaroslavros",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-10T18:31:46Z",
+      "updatedAt": "2026-07-10T22:29:33Z",
+      "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "baseRefName": "main",
+      "baseRefOid": "c3332da37aa7298343fdd7b0d61c7ed2897061ac",
+      "headRepository": "yaroslavros/draft-kazuho-ptth-ptth",
+      "headRefName": "qmux-alpn",
+      "headRefOid": "2464632bca01ec29da980bba14f4602f70970f8f",
+      "closedAt": "2026-07-10T22:29:33Z",
+      "mergedAt": "2026-07-10T22:29:33Z",
+      "mergedBy": "kazuho",
+      "mergeCommit": {
+        "oid": "3d071c9296d3b5b58fdb124f5bb5c09944cfe22e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFqxDJQ",
+          "commit": {
+            "abbreviatedOid": "2464632"
+          },
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Thank you for the PR! LG.",
+          "createdAt": "2026-07-10T22:28:16Z",
+          "updatedAt": "2026-07-10T22:28:16Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOPVzIEM7wTUT0",
+      "title": "Added co-author",
+      "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/3",
+      "state": "MERGED",
+      "author": "yaroslavros",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-10T18:32:52Z",
+      "updatedAt": "2026-07-10T22:26:11Z",
+      "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "baseRefName": "main",
+      "baseRefOid": "c3332da37aa7298343fdd7b0d61c7ed2897061ac",
+      "headRepository": "yaroslavros/draft-kazuho-ptth-ptth",
+      "headRefName": "co-author",
+      "headRefOid": "ca359c4abc1d06b689fb5059827fc5b916e73b40",
+      "closedAt": "2026-07-10T22:26:11Z",
+      "mergedAt": "2026-07-10T22:26:11Z",
+      "mergedBy": "kazuho",
+      "mergeCommit": {
+        "oid": "01e788f8b9dca4cbf8b79ce4948e7adff00865d6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFqwhFg",
+          "commit": {
+            "abbreviatedOid": "ca359c4"
+          },
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Thank you!",
+          "createdAt": "2026-07-10T22:26:00Z",
+          "updatedAt": "2026-07-10T22:26:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOPVzIEM7wTaqm",
+      "title": "Slight polish of references",
+      "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/4",
+      "state": "MERGED",
+      "author": "yaroslavros",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-10T18:37:53Z",
+      "updatedAt": "2026-07-10T23:56:17Z",
+      "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "baseRefName": "main",
+      "baseRefOid": "c3332da37aa7298343fdd7b0d61c7ed2897061ac",
+      "headRepository": "yaroslavros/draft-kazuho-ptth-ptth",
+      "headRefName": "cleanup-references",
+      "headRefOid": "f7a9cbb0556e9ebbd084480dd5aa4008afcbcfec",
+      "closedAt": "2026-07-10T23:56:17Z",
+      "mergedAt": "2026-07-10T23:56:17Z",
+      "mergedBy": "kazuho",
+      "mergeCommit": {
+        "oid": "e55806eff17e6641013fe66d8cce86d75898df22"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFqyaUg",
+          "commit": {
+            "abbreviatedOid": "58eca65"
+          },
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "Thank you, I only have one question; otherwise all makes sense.",
+          "createdAt": "2026-07-10T22:34:14Z",
+          "updatedAt": "2026-07-10T22:34:46Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\n({{Section 7.8 of !HTTP-SEMANTICS=RFC9110}}) \u2014 that both authenticates the backend server\n```\n\nConsidering that the upgrade mechanism of HTTP/1.1 is defined in the section of RFC 9110 referred to, I think this needs to be a normative reference?",
+              "createdAt": "2026-07-10T22:34:15Z",
+              "updatedAt": "2026-07-10T22:34:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABFqzQTQ",
+          "commit": {
+            "abbreviatedOid": "58eca65"
+          },
+          "author": "yaroslavros",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-10T22:38:15Z",
+          "updatedAt": "2026-07-10T22:38:15Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Yup, that is a mistake on my part. Well spotted!",
+              "createdAt": "2026-07-10T22:38:15Z",
+              "updatedAt": "2026-07-10T22:38:15Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOPVzIEM7weFM1",
+      "title": "clarify that H1/H2 are used without a new layer of TLS",
+      "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/5",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Be clear that when H1 or H2 is negotiated, they are used without TLS; the setup channel provides confidentiality and integrity.\r\n\r\nAlso, provide an example of metadata; in this case the intent to shut down the connection (in H1, it's `connection: close`, in H2, it's GOAWAY).",
+      "createdAt": "2026-07-11T07:03:59Z",
+      "updatedAt": "2026-07-11T07:46:18Z",
+      "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "baseRefName": "main",
+      "baseRefOid": "e55806eff17e6641013fe66d8cce86d75898df22",
+      "headRepository": "kazuho/draft-kazuho-ptth-ptth",
+      "headRefName": "kazuho/h1-h2-in-clear",
+      "headRefOid": "c434ab76f2fbb5bea3dac9c870836df112846ce0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
