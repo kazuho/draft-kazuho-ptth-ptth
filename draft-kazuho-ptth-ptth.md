@@ -79,12 +79,15 @@ differs between HTTP versions, the accompanying header fields do not. The
 parameters for negotiating PTTH are therefore defined in a version-neutral
 manner.
 
-The target URI of the establishment request is constructed from the URI
-Template described in {{client-config}}. Besides identifying the PTTH endpoint,
-the target URI identifies the backend origin for which the backend server is
-registering a transposed channel. Likewise, the authentication scheme is
-unspecified: deployments can use a TLS- or an HTTP-based scheme, or something
-else.
+The target URI of the request identifies the PTTH endpoint and the scope of
+requests that the reverse proxy forwards to the backend server over the
+transposed channel. When that scope is an origin ({{!WEB-ORIGIN=RFC6454}}), the
+well-known URI defined in {{client-config}} is used. When the scope is
+expressed by other means, such as a configuration identifier, the target URI is
+left to the deployment.
+
+The authentication scheme is unspecified: deployments can use a TLS- or an
+HTTP-based scheme, or something else.
 
 Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
