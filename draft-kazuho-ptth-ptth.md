@@ -109,21 +109,21 @@ registering a transposed channel.
 The following examples show URI Templates for registering PTTH channels:
 
 ~~~
-https://proxy.example.org/.well-known/ptth/{backend_scheme}/{backend_authority}/
-https://proxy.example.org:4443/ptth?s={backend_scheme}&a={backend_authority}
-https://proxy.example.org:4443/ptth{?backend_scheme,backend_authority}
+https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+https://proxy.example.org:4443/ptth?origin={serialized_origin}
+https://proxy.example.org:4443/ptth{?serialized_origin}
 ~~~
 {: #fig-uri-template title="URI Template Examples"}
 
 The following requirements apply to the URI Template:
 
-* The URI Template MUST be a level 3 template or lower.
+* The URI Template MUST be a level 4 template or lower.
 * The URI Template MUST be in absolute form and MUST include non-empty scheme,
   authority, and path components.
 * The path component of the URI Template MUST start with a slash ("/").
 * All template variables MUST be within the path or query components of the URI.
-* The URI Template MUST contain the variables "backend_scheme" and
-  "backend_authority" and MAY contain other variables.
+* The URI Template MUST contain the variable "serialized_origin" and
+  MAY contain other variables.
 * The URI Template MUST NOT contain any non-ASCII Unicode characters and MUST
   only contain ASCII characters in the range 0x21-0x7E inclusive.
 * The URI Template MUST NOT use Reserved Expansion ("+" operator), Fragment
@@ -137,35 +137,42 @@ perform PTTH-specific validation. If a backend server detects that any of the
 requirements above are not met by a URI Template, it MUST reject its
 configuration and abort the request without sending it to the reverse proxy.
 
-The "backend_scheme" and "backend_authority" variables identify the backend
-origin being registered. The "backend_scheme" variable contains the scheme of
-the backend origin. The "backend_authority" variable contains the authority of
-the backend origin, consisting of a host and, optionally, a port. The authority
-MUST NOT contain userinfo. If the authority includes a port, the colon (":")
-preceding the port is part of the "backend_authority" value before URI Template
-expansion, but is percent-encoded when represented in the resulting target URI.
-For example, the backend authority "backend.example.com:8443" is represented as
-"backend.example.com%3A8443" in the expanded URI. If the authority does not
-include a port, the default port for "backend_scheme" is implied.
+The "serialized_origin" variable identifies the backend origin or origins being
+registered. The value of "serialized_origin" is a non-empty list. Each member of
+the list is a "serialized-origin" value as defined in {{Section 7.1 of
+WEB-ORIGIN}} and MUST be the ASCII serialization of an origin as defined in
+{{Section 6.2 of WEB-ORIGIN}}. The value "null" MUST NOT be used.
 
-Using the terms "scheme", "host", and "port" from {{Section 3 of !URI=RFC3986}}, these variables
-adhere to the following format:
+If the port is omitted from a serialized origin, the default port for the
+corresponding scheme is implied.
 
-~~~ abnf
-backend_scheme    = scheme
-backend_authority = host [ ":" port ]
-~~~
-{: #fig-origin-vars title="URI Template Variable Format"}
+When represented in the resulting target URI, characters in each serialized
+origin that are not allowed in the target URI component are percent-encoded by
+URI Template expansion. For example, the serialized origin
+"https://backend.example.com:8443" is represented as
+"https%3A%2F%2Fbackend.example.com%3A8443" when expanded into a path segment.
 
 When sending a PTTH establishment request, the backend server MUST perform URI
-Template expansion using "backend_scheme" and "backend_authority" from the
-backend origin it is registering.
+Template expansion using "serialized_origin" set to the list of backend origins
+it is registering. If more than one origin is registered, the list contains one
+serialized origin for each backend origin. For example, expanding
+
+~~~
+https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+~~~
+
+with "serialized_origin" set to the list containing
+"https://backend.example.com" and "https://api.example.com:8443" produces:
+
+~~~
+https://proxy.example.org/.well-known/ptth/https%3A%2F%2Fbackend.example.com,https%3A%2F%2Fapi.example.com%3A8443/
+~~~
 
 Backend server implementations that are constrained to configuring only the
 reverse proxy host and port MAY attempt to use the following default template:
 
 ~~~
-https://$PROXY_HOST:$PROXY_PORT/.well-known/ptth/{backend_scheme}/{backend_authority}/
+https://$PROXY_HOST:$PROXY_PORT/.well-known/ptth/{serialized_origin}/
 ~~~
 
 where $PROXY_HOST and $PROXY_PORT are the configured host and port of the
@@ -202,7 +209,7 @@ authenticates the backend server, which offers both HTTP/2 and HTTP/1.1; the
 reverse proxy selects HTTP/2.
 
 ~~~
-GET /.well-known/ptth/https/backend.example.com/ HTTP/1.1
+GET /.well-known/ptth/https%3A%2F%2Fbackend.example.com/ HTTP/1.1
 Host: proxy.example.com
 Connection: upgrade
 Upgrade: ptth
@@ -327,11 +334,10 @@ This authority model of HTTP remains unchanged under PTTH:
   PTTH differs only in how the backend connections are established.
 
 Accepting a PTTH establishment request does more than authenticate the backend
-server. It authorizes that backend server to receive requests for the backend
+server. It authorizes that backend server to receive requests for each backend
 origin identified by the request target. A reverse proxy MUST therefore verify
-that the authenticated backend server is authorized to register the requested
+that the authenticated backend server is authorized to register every requested
 backend origin before accepting the request.
-
 
 # IANA Considerations
 
