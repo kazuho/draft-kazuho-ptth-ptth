@@ -5,8 +5,8 @@
 httpbis                                                 奥 一穂 (K. Oku)
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                            Y. Rosomakho
-Expires: 11 January 2027                                         Zscaler
-                                                            10 July 2026
+Expires: 20 January 2027                                         Zscaler
+                                                            19 July 2026
 
 
              Protocol for Transposed Transactions over HTTP
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 January 2027.
+   This Internet-Draft will expire on 20 January 2027.
 
 Copyright Notice
 
@@ -71,14 +71,18 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Establishing Transposed HTTP Channels
-     3.1.  HTTP/1 and HTTP/2
-     3.2.  HTTP/3
+     3.1.  Client Configuration
+     3.2.  HTTP/1 and HTTP/2
+     3.3.  HTTP/3
    4.  Avoiding Encapsulation Overhead
      4.1.  HTTP/1 and HTTP/2
      4.2.  HTTP/3
    5.  Security Considerations
      5.1.  Establishing Authority
    6.  IANA Considerations
+     6.1.  HTTP Upgrade Token
+     6.2.  TLS Exporter Label
+     6.3.  Well-Known URI
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -138,12 +142,15 @@ Table of Contents
    versions, the accompanying header fields do not.  The parameters for
    negotiating PTTH are therefore defined in a version-neutral manner.
 
-   The exact form of the request target is unspecified; it is up to each
-   reverse proxy deployment.  Besides identifying the PTTH endpoint, the
-   target can express the conditions that select which requests the
-   reverse proxy routes to the transposed channel.  Likewise, the
-   authentication scheme is unspecified: deployments can use a TLS- or
-   an HTTP-based scheme, or something else.
+   The target URI of the request identifies the PTTH endpoint and the
+   scope of requests that the reverse proxy forwards to the backend
+   server over the transposed channel.  When that scope is an origin
+   ([WEB-ORIGIN]), the well-known URI defined in Section 3.1 is used.
+   When the scope is expressed by other means, such as a configuration
+   identifier, the target URI is left to the deployment.
+
+   The authentication scheme is unspecified: deployments can use a TLS-
+   or an HTTP-based scheme, or something else.
 
    Once a transposed channel is established, HTTP requests flow from the
    reverse proxy to the backend server: the reverse proxy acts as the
@@ -155,7 +162,98 @@ Table of Contents
    server can send an extended CONNECT request on any version of HTTP
    and establish a transposed HTTP channel of any HTTP version.
 
-3.1.  HTTP/1 and HTTP/2
+3.1.  Client Configuration
+
+   When backend servers are configured to receive forwarded requests
+   scoped by an origin, they use a target URI built from a URI Template
+   ([URI-TEMPLATE]) to establish a transposed channel.  The URI Template
+   identifies the reverse proxy and the origin for which the backend
+   server is registering a transposed channel.
+
+   The following examples show URI Templates for registering PTTH
+   channels:
+
+   https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+   https://proxy.example.org:4443/ptth?origin={serialized_origin}
+   https://proxy.example.org:4443/ptth{?serialized_origin}
+
+                      Figure 1: URI Template Examples
+
+   The following requirements apply to the URI Template:
+
+   *  The URI Template MUST be a level 4 template or lower.
+
+   *  The URI Template MUST be in absolute form and MUST include non-
+      empty scheme, authority, and path components.
+
+   *  The path component of the URI Template MUST start with a slash
+      ("/").
+
+   *  All template variables MUST be within the path or query components
+      of the URI.
+
+   *  The URI Template MUST contain the variable "serialized_origin" and
+      MAY contain other variables.
+
+   *  The URI Template MUST NOT contain any non-ASCII Unicode characters
+      and MUST only contain ASCII characters in the range 0x21-0x7E
+      inclusive.
+
+   *  The URI Template MUST NOT use Reserved Expansion ("+" operator),
+      Fragment Expansion ("#" operator), Label Expansion with Dot-
+      Prefix, Path Segment Expansion with Slash-Prefix, or Path-Style
+      Parameter Expansion with Semicolon-Prefix.
+
+   Backend servers SHOULD validate the requirements above.  However, a
+   backend server MAY use a general-purpose URI Template implementation
+   that does not perform PTTH-specific validation.  If a backend server
+   detects that any of the requirements above are not met by a URI
+   Template, it MUST reject its configuration and abort the request
+   without sending it to the reverse proxy.
+
+   The "serialized_origin" variable identifies the backend origin or
+   origins being registered.  The value of "serialized_origin" is a non-
+   empty list.  Each member of the list is a "serialized-origin" value
+   as defined in Section 7.1 of [WEB-ORIGIN] and MUST be the ASCII
+   serialization of an origin as defined in Section 6.2 of [WEB-ORIGIN].
+   The value "null" MUST NOT be used.
+
+   If the port is omitted from a serialized origin, the default port for
+   the corresponding scheme is implied.
+
+   When represented in the resulting target URI, characters in each
+   serialized origin that are not allowed in the target URI component
+   are percent-encoded by URI Template expansion.  For example, the
+   serialized origin "https://backend.example.com:8443" is represented
+   as "https%3A%2F%2Fbackend.example.com%3A8443" when expanded into a
+   path segment.
+
+   When sending a PTTH establishment request, the backend server MUST
+   perform URI Template expansion using "serialized_origin" set to the
+   list of backend origins it is registering.  If more than one origin
+   is registered, the list contains one serialized origin for each
+   backend origin.  For example, expanding
+
+   https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+
+   with "serialized_origin" set to the list containing
+   "https://backend.example.com" and "https://api.example.com:8443"
+   produces:
+
+https://proxy.example.org/.well-known/ptth/https%3A%2F%2Fbackend.example.com,https%3A%2F%2Fapi.example.com%3A8443/
+
+   Backend server implementations that are constrained to configuring
+   only the reverse proxy host and port MAY attempt to use the following
+   default template:
+
+   https://$PROXY_HOST:$PROXY_PORT/.well-known/ptth/{serialized_origin}/
+
+   where $PROXY_HOST and $PROXY_PORT are the configured host and port of
+   the reverse proxy, respectively.  PTTH deployments SHOULD offer
+   service at this location if they need to interoperate with such
+   backend servers.
+
+3.2.  HTTP/1 and HTTP/2
 
    To establish a transposed HTTP/1 or HTTP/2 channel, the backend
    server issues extended CONNECT accompanied by the "ptth" token: in
@@ -184,13 +282,13 @@ Table of Contents
    offers richer framing and metadata exchange than HTTP/1.1, HTTP/2 is
    RECOMMENDED as the transposed protocol.
 
-   Figure 1 shows an HTTP/1.1 exchange establishing a transposed
+   Figure 2 shows an HTTP/1.1 exchange establishing a transposed
    channel.  Here the Basic HTTP Authentication Scheme [BASIC-AUTH]
    authenticates the backend server, which offers both HTTP/2 and
    HTTP/1.1; the reverse proxy selects HTTP/2.
 
-   GET /reverse-endpoint HTTP/1.1
-   Host: example.com
+   GET /.well-known/ptth/https%3A%2F%2Fbackend.example.com/ HTTP/1.1
+   Host: proxy.example.com
    Connection: upgrade
    Upgrade: ptth
    Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
@@ -201,9 +299,9 @@ Table of Contents
    Upgrade: ptth
    ALPN: h3qx
 
-         Figure 1: Establishing a transposed channel over HTTP/1.1
+         Figure 2: Establishing a transposed channel over HTTP/1.1
 
-3.2.  HTTP/3
+3.3.  HTTP/3
 
    HTTP/3 ([HTTP/3]) runs over QUIC ([QUIC]), whose underlying transport
    is UDP.  A transposed HTTP/3 channel is therefore established as a
@@ -318,7 +416,16 @@ Table of Contents
       whatever authentication scheme it chooses.  PTTH differs only in
       how the backend connections are established.
 
+   Accepting a PTTH establishment request does more than authenticate
+   the backend server.  It authorizes that backend server to receive
+   requests for each backend origin identified by the request target.  A
+   reverse proxy MUST therefore verify that the authenticated backend
+   server is authorized to register every requested backend origin
+   before accepting the request.
+
 6.  IANA Considerations
+
+6.1.  HTTP Upgrade Token
 
    Once approved, this document will request IANA to register the
    following entries to the "HTTP Upgrade Tokens" registry maintained at
@@ -343,8 +450,10 @@ Table of Contents
 
    Reference:  this document
 
-   This document also requests IANA to register the following entry in
-   the "TLS Exporter Labels" registry maintained at
+6.2.  TLS Exporter Label
+
+   Once approved, this document will request IANA to register the
+   following entry in the "TLS Exporter Labels" registry maintained at
    https://www.iana.org/assignments/tls-parameters
    (https://www.iana.org/assignments/tls-parameters):
 
@@ -355,6 +464,21 @@ Table of Contents
    Recommended:  Y
 
    Reference:  this document
+
+6.3.  Well-Known URI
+
+   Once approved, this document will request IANA to register the
+   following entry in the "Well-Known URIs" registry maintained at
+   https://www.iana.org/assignments/well-known-uris
+   (https://www.iana.org/assignments/well-known-uris):
+
+   URI Suffix:  ptth
+
+   Reference:  this document
+
+   Status:  permanent
+
+   Change Controller:  IETF
 
 7.  References
 
@@ -420,6 +544,17 @@ Table of Contents
               ietf-tls-rfc8446bis-14, 13 September 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
               rfc8446bis-14>.
+
+   [URI-TEMPLATE]
+              Gregorio, J., Fielding, R., Hadley, M., Nottingham, M.,
+              and D. Orchard, "URI Template", RFC 6570,
+              DOI 10.17487/RFC6570, March 2012,
+              <https://www.rfc-editor.org/rfc/rfc6570>.
+
+   [WEB-ORIGIN]
+              Barth, A., "The Web Origin Concept", RFC 6454,
+              DOI 10.17487/RFC6454, December 2011,
+              <https://www.rfc-editor.org/rfc/rfc6454>.
 
 7.2.  Informative References
 

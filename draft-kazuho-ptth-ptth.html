@@ -28,7 +28,7 @@ settings and with minimal overhead.
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.10.0
+    platformdirs 4.10.1
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
@@ -1055,7 +1055,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Oku &amp; Rosomakho</td>
-<td class="center">Expires 11 January 2027</td>
+<td class="center">Expires 20 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg {
 <dd class="internet-draft">draft-kazuho-ptth-ptth-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-07-10" class="published">10 July 2026</time>
+<time datetime="2026-07-19" class="published">19 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-01-11">11 January 2027</time></dd>
+<dd class="expires"><time datetime="2027-01-20">20 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ settings and with minimal overhead.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1168,10 +1168,13 @@ settings and with minimal overhead.<a href="#section-abstract-1" class="pilcrow"
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-establishing-transposed-htt" class="internal xref">Establishing Transposed HTTP Channels</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-http-1-and-http-2" class="internal xref">HTTP/1 and HTTP/2</a></p>
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-client-configuration" class="internal xref">Client Configuration</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-http-3" class="internal xref">HTTP/3</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-http-1-and-http-2" class="internal xref">HTTP/1 and HTTP/2</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-http-3" class="internal xref">HTTP/3</a></p>
 </li>
             </ul>
 </li>
@@ -1196,6 +1199,17 @@ settings and with minimal overhead.<a href="#section-abstract-1" class="pilcrow"
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-http-upgrade-token" class="internal xref">HTTP Upgrade Token</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-tls-exporter-label" class="internal xref">TLS Exporter Label</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-well-known-uri" class="internal xref">Well-Known URI</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
@@ -1282,54 +1296,155 @@ and negotiates the transposition. Although the way extended CONNECT is expressed
 differs between HTTP versions, the accompanying header fields do not. The
 parameters for negotiating PTTH are therefore defined in a version-neutral
 manner.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">The exact form of the request target is unspecified; it is up to each reverse
-proxy deployment. Besides identifying the PTTH endpoint, the target can express
-the conditions that select which requests the reverse proxy routes to the
-transposed channel. Likewise, the authentication scheme is unspecified:
-deployments can use a TLS- or an HTTP-based scheme, or something else.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Once a transposed channel is established, HTTP requests flow from the reverse
+<p id="section-3-2">The target URI of the request identifies the PTTH endpoint and the scope of
+requests that the reverse proxy forwards to the backend server over the
+transposed channel. When that scope is an origin (<span>[<a href="#WEB-ORIGIN" class="cite xref">WEB-ORIGIN</a>]</span>), the
+well-known URI defined in <a href="#client-config" class="auto internal xref">Section 3.1</a> is used. When the scope is
+expressed by other means, such as a configuration identifier, the target URI is
+left to the deployment.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">The authentication scheme is unspecified: deployments can use a TLS- or an
+HTTP-based scheme, or something else.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Once a transposed channel is established, HTTP requests flow from the reverse
 proxy to the backend server: the reverse proxy acts as the HTTP client and the
-backend server as the HTTP server on the transposed channel.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">The HTTP version that carries the extended CONNECT request and the HTTP version
+backend server as the HTTP server on the transposed channel.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The HTTP version that carries the extended CONNECT request and the HTTP version
 of the transposed channel are independent. The backend server can send an
 extended CONNECT request on any version of HTTP and establish a transposed HTTP
-channel of any HTTP version.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<div id="http1-and-http2">
+channel of any HTTP version.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<div id="client-config">
 <section id="section-3.1">
-        <h3 id="name-http-1-and-http-2">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-http-1-and-http-2" class="section-name selfRef">HTTP/1 and HTTP/2</a>
+        <h3 id="name-client-configuration">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-client-configuration" class="section-name selfRef">Client Configuration</a>
         </h3>
-<p id="section-3.1-1">To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
+<p id="section-3.1-1">When backend servers are configured to receive forwarded requests scoped by an
+origin, they use a target URI built from a URI Template
+(<span>[<a href="#URI-TEMPLATE" class="cite xref">URI-TEMPLATE</a>]</span>) to establish a transposed channel. The URI Template
+identifies the reverse proxy and the origin for which the backend server is
+registering a transposed channel.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The following examples show URI Templates for registering PTTH channels:<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<span id="name-uri-template-examples"></span><div id="fig-uri-template">
+<figure id="figure-1">
+          <div class="alignLeft art-text artwork" id="section-3.1-3.1">
+<pre>
+https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+https://proxy.example.org:4443/ptth?origin={serialized_origin}
+https://proxy.example.org:4443/ptth{?serialized_origin}
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-uri-template-examples" class="selfRef">URI Template Examples</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.1-4">The following requirements apply to the URI Template:<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1-5.1">
+            <p id="section-3.1-5.1.1">The URI Template <span class="bcp14">MUST</span> be a level 4 template or lower.<a href="#section-3.1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.2">
+            <p id="section-3.1-5.2.1">The URI Template <span class="bcp14">MUST</span> be in absolute form and <span class="bcp14">MUST</span> include non-empty scheme,
+authority, and path components.<a href="#section-3.1-5.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.3">
+            <p id="section-3.1-5.3.1">The path component of the URI Template <span class="bcp14">MUST</span> start with a slash ("/").<a href="#section-3.1-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.4">
+            <p id="section-3.1-5.4.1">All template variables <span class="bcp14">MUST</span> be within the path or query components of the URI.<a href="#section-3.1-5.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.5">
+            <p id="section-3.1-5.5.1">The URI Template <span class="bcp14">MUST</span> contain the variable "serialized_origin" and
+<span class="bcp14">MAY</span> contain other variables.<a href="#section-3.1-5.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.6">
+            <p id="section-3.1-5.6.1">The URI Template <span class="bcp14">MUST NOT</span> contain any non-ASCII Unicode characters and <span class="bcp14">MUST</span>
+only contain ASCII characters in the range 0x21-0x7E inclusive.<a href="#section-3.1-5.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.7">
+            <p id="section-3.1-5.7.1">The URI Template <span class="bcp14">MUST NOT</span> use Reserved Expansion ("+" operator), Fragment
+Expansion ("#" operator), Label Expansion with Dot-Prefix, Path Segment
+Expansion with Slash-Prefix, or Path-Style Parameter Expansion with
+Semicolon-Prefix.<a href="#section-3.1-5.7.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.1-6">Backend servers <span class="bcp14">SHOULD</span> validate the requirements above. However, a backend
+server <span class="bcp14">MAY</span> use a general-purpose URI Template implementation that does not
+perform PTTH-specific validation. If a backend server detects that any of the
+requirements above are not met by a URI Template, it <span class="bcp14">MUST</span> reject its
+configuration and abort the request without sending it to the reverse proxy.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">The "serialized_origin" variable identifies the backend origin or origins being
+registered. The value of "serialized_origin" is a non-empty list. Each member of
+the list is a "serialized-origin" value as defined in <span><a href="https://rfc-editor.org/rfc/rfc6454#section-7.1" class="relref">Section 7.1</a> of [<a href="#WEB-ORIGIN" class="cite xref">WEB-ORIGIN</a>]</span> and <span class="bcp14">MUST</span> be the ASCII serialization of an origin as defined in
+<span><a href="https://rfc-editor.org/rfc/rfc6454#section-6.2" class="relref">Section 6.2</a> of [<a href="#WEB-ORIGIN" class="cite xref">WEB-ORIGIN</a>]</span>. The value "null" <span class="bcp14">MUST NOT</span> be used.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1-8">If the port is omitted from a serialized origin, the default port for the
+corresponding scheme is implied.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.1-9">When represented in the resulting target URI, characters in each serialized
+origin that are not allowed in the target URI component are percent-encoded by
+URI Template expansion. For example, the serialized origin
+"https://backend.example.com:8443" is represented as
+"https%3A%2F%2Fbackend.example.com%3A8443" when expanded into a path segment.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.1-10">When sending a PTTH establishment request, the backend server <span class="bcp14">MUST</span> perform URI
+Template expansion using "serialized_origin" set to the list of backend origins
+it is registering. If more than one origin is registered, the list contains one
+serialized origin for each backend origin. For example, expanding<a href="#section-3.1-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-11">
+<pre>
+https://proxy.example.org/.well-known/ptth/{serialized_origin}/
+</pre><a href="#section-3.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-12">with "serialized_origin" set to the list containing
+"https://backend.example.com" and "https://api.example.com:8443" produces:<a href="#section-3.1-12" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-13">
+<pre>
+https://proxy.example.org/.well-known/ptth/https%3A%2F%2Fbackend.example.com,https%3A%2F%2Fapi.example.com%3A8443/
+</pre><a href="#section-3.1-13" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-14">Backend server implementations that are constrained to configuring only the
+reverse proxy host and port <span class="bcp14">MAY</span> attempt to use the following default template:<a href="#section-3.1-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-15">
+<pre>
+https://$PROXY_HOST:$PROXY_PORT/.well-known/ptth/{serialized_origin}/
+</pre><a href="#section-3.1-15" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-16">where $PROXY_HOST and $PROXY_PORT are the configured host and port of the
+reverse proxy, respectively. PTTH deployments <span class="bcp14">SHOULD</span> offer service at this
+location if they need to interoperate with such backend servers.<a href="#section-3.1-16" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="http1-and-http2">
+<section id="section-3.2">
+        <h3 id="name-http-1-and-http-2">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-http-1-and-http-2" class="section-name selfRef">HTTP/1 and HTTP/2</a>
+        </h3>
+<p id="section-3.2-1">To establish a transposed HTTP/1 or HTTP/2 channel, the backend server issues
 extended CONNECT accompanied by the "ptth" token: in HTTP/1.1
 (<span>[<a href="#H1" class="cite xref">HTTP/1</a>]</span>), a "GET" request carrying an "Upgrade: ptth" header field;
 in HTTP/2 (<span>[<a href="#H2" class="cite xref">HTTP/2</a>]</span>) and HTTP/3 (<span>[<a href="#H3" class="cite xref">HTTP/3</a>]</span>), a CONNECT
-request carrying "ptth" in the ":protocol" pseudo-header field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">The request <span class="bcp14">MUST</span> also carry the ALPN header field (<span>[<a href="#ALPN-HEADER" class="cite xref">ALPN-HEADER</a>]</span>)
+request carrying "ptth" in the ":protocol" pseudo-header field.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The request <span class="bcp14">MUST</span> also carry the ALPN header field (<span>[<a href="#ALPN-HEADER" class="cite xref">ALPN-HEADER</a>]</span>)
 specifying the HTTP versions that the backend server is willing to use on the
 transposed channel. Valid ALPN identifiers include HTTP protocols that run
 directly over a byte stream, such as "h2" and "http/1.1", and HTTP/3 over QMux
 (<span>[<a href="#HTTP3-QMUX" class="cite xref">HTTP3-QMUX</a>]</span>), identified by the "h3qx"
-ALPN identifier.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">When the transposition succeeds, the reverse proxy returns a successful response
+ALPN identifier.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
 response in HTTP/2 and HTTP/3 — carrying an ALPN response header field that
 specifies the chosen HTTP version. The transposed channel is then carried
-directly over the resulting bidirectional byte stream.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
+directly over the resulting bidirectional byte stream.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
 HTTP protocol supplies its own framing and can exchange metadata — through
 header fields, and in HTTP/2 through control frames — so it already provides
 what capsules would. Because HTTP/2 offers richer framing and metadata exchange
-than HTTP/1.1, HTTP/2 is <span class="bcp14">RECOMMENDED</span> as the transposed protocol.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5"><a href="#fig-establishment" class="auto internal xref">Figure 1</a> shows an HTTP/1.1 exchange establishing a transposed
+than HTTP/1.1, HTTP/2 is <span class="bcp14">RECOMMENDED</span> as the transposed protocol.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5"><a href="#fig-establishment" class="auto internal xref">Figure 2</a> shows an HTTP/1.1 exchange establishing a transposed
 channel. Here the Basic HTTP Authentication Scheme <span>[<a href="#BASIC-AUTH" class="cite xref">BASIC-AUTH</a>]</span>
 authenticates the backend server, which offers both HTTP/2 and HTTP/1.1; the
-reverse proxy selects HTTP/2.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+reverse proxy selects HTTP/2.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <span id="name-establishing-a-transposed-c"></span><div id="fig-establishment">
-<figure id="figure-1">
-          <div class="alignLeft art-text artwork" id="section-3.1-6.1">
+<figure id="figure-2">
+          <div class="alignLeft art-text artwork" id="section-3.2-6.1">
 <pre>
-GET /reverse-endpoint HTTP/1.1
-Host: example.com
+GET /.well-known/ptth/https%3A%2F%2Fbackend.example.com/ HTTP/1.1
+Host: proxy.example.com
 Connection: upgrade
 Upgrade: ptth
 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
@@ -1342,50 +1457,50 @@ ALPN: h3qx
 
 </pre>
 </div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-establishing-a-transposed-c" class="selfRef">Establishing a transposed channel over HTTP/1.1</a>
           </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="http3">
-<section id="section-3.2">
+<section id="section-3.3">
         <h3 id="name-http-3">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-http-3" class="section-name selfRef">HTTP/3</a>
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-http-3" class="section-name selfRef">HTTP/3</a>
         </h3>
-<p id="section-3.2-1">HTTP/3 (<span>[<a href="#H3" class="cite xref">HTTP/3</a>]</span>) runs over QUIC (<span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>), whose underlying
+<p id="section-3.3-1">HTTP/3 (<span>[<a href="#H3" class="cite xref">HTTP/3</a>]</span>) runs over QUIC (<span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>), whose underlying
 transport is UDP. A transposed HTTP/3 channel is therefore established as a new
-HTTP/3 connection whose UDP flow is proxied over the setup channel.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">To establish it, the backend server issues an extended CONNECT request with a
+HTTP/3 connection whose UDP flow is proxied over the setup channel.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">To establish it, the backend server issues an extended CONNECT request with a
 "ptth-udp" upgrade token, together with an ALPN header field specifying HTTP/3.
 The new connection is initiated by the reverse proxy toward the backend server;
 the reverse proxy is thus the client-side of the transposed connection as well
 as being the HTTP client, and the backend server is the server-side of the
 transposed connection as well as being the HTTP server, so the transposed
 connection is an ordinary HTTP/3 connection in which no transport or stream
-roles are reversed.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">The UDP flow carrying the new connection is proxied over the setup channel as
+roles are reversed.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">The UDP flow carrying the new connection is proxied over the setup channel as
 datagrams encapsulated using HTTP/3 Datagrams or capsules
 (<span>[<a href="#CAPSULE" class="cite xref">CAPSULE</a>]</span>), as in Proxying UDP in HTTP (<span>[<a href="#CONNECT-UDP" class="cite xref">CONNECT-UDP</a>]</span>).
 Therefore, while any version of HTTP can be used as the setup channel, using
 HTTP/3 as the setup channel provides the opportunity to use HTTP/3 Datagrams and
-avoid head-of-line blocking.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">To reduce the encapsulation overhead, extensions that optimize the proxying of
-UDP <span class="bcp14">MAY</span> also be used; see <a href="#fwd" class="auto internal xref">Section 4.2</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">For the QUIC handshake (<span>[<a href="#QUIC-TLS" class="cite xref">QUIC-TLS</a>]</span>) of the new connection, an
+avoid head-of-line blocking.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">To reduce the encapsulation overhead, extensions that optimize the proxying of
+UDP <span class="bcp14">MAY</span> also be used; see <a href="#fwd" class="auto internal xref">Section 4.2</a>.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.3-5">For the QUIC handshake (<span>[<a href="#QUIC-TLS" class="cite xref">QUIC-TLS</a>]</span>) of the new connection, an
 external PSK (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-rfc8446bis-14#section-2.2" class="relref">Section 2.2</a> of [<a href="#TLS" class="cite xref">TLS</a>]</span>) is used, which both endpoints
 derive from the setup channel's TLS or QUIC connection using the exporter
 interface (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-rfc8446bis-14#section-7.5" class="relref">Section 7.5</a> of [<a href="#TLS" class="cite xref">TLS</a>]</span>), with the label "ptth-udp", an empty
 context, and an output length equal to the size of the hash of the cipher suite
 negotiated on the setup channel. That hash is also the PSK's associated hash
-function, and the key is offered under the PSK identity "ptth-udp".<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">The purpose of this PSK is not to authenticate the backend server. Instead, it
+function, and the key is offered under the PSK identity "ptth-udp".<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.3-6">The purpose of this PSK is not to authenticate the backend server. Instead, it
 is used to let the QUIC connection, an always-encrypted transport, inherit the
 security context of the setup channel. When the reverse proxy returns a
 successful response to the extended CONNECT request, it has already validated
 the identity of the backend server as with ordinary HTTP requests, and has
 agreed to forward requests. Authentication of the backend server is unneeded
-after that point.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+after that point.<a href="#section-3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1469,6 +1584,11 @@ reverse proxy initiated, using whatever authentication scheme it chooses.
 PTTH differs only in how the backend connections are established.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-5.1-4">Accepting a PTTH establishment request does more than authenticate the backend
+server. It authorizes that backend server to receive requests for each backend
+origin identified by the request target. A reverse proxy <span class="bcp14">MUST</span> therefore verify
+that the authenticated backend server is authorized to register every requested
+backend origin before accepting the request.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1478,76 +1598,121 @@ PTTH differs only in how the backend connections are established.<a href="#secti
       <h2 id="name-iana-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-6-1">Once approved, this document will request IANA to register the following entries
+<div id="http-upgrade-token">
+<section id="section-6.1">
+        <h3 id="name-http-upgrade-token">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-http-upgrade-token" class="section-name selfRef">HTTP Upgrade Token</a>
+        </h3>
+<p id="section-6.1-1">Once approved, this document will request IANA to register the following entries
 to the "HTTP Upgrade Tokens" registry maintained at
-<a href="https://www.iana.org/assignments/http-upgrade-tokens">https://www.iana.org/assignments/http-upgrade-tokens</a>:<a href="#section-6-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6-2">
-        <dt id="section-6-2.1">Value:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.2">
-          <p id="section-6-2.2.1">ptth<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+<a href="https://www.iana.org/assignments/http-upgrade-tokens">https://www.iana.org/assignments/http-upgrade-tokens</a>:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.1-2">
+          <dt id="section-6.1-2.1">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.2">
+            <p id="section-6.1-2.2.1">ptth<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.3">Description:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.4">
+            <p id="section-6.1-2.4.1">Establishes a transposed HTTP channel that runs over a byte stream.<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.5">Expected Version Tokens:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.6">
+            <p id="section-6.1-2.6.1">None<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.7">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.8">
+            <p id="section-6.1-2.8.1">this document<a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.9">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.10">
+            <p id="section-6.1-2.10.1">ptth-udp<a href="#section-6.1-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.11">Description:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.12">
+            <p id="section-6.1-2.12.1">Establishes a transposed HTTP channel that runs over UDP.<a href="#section-6.1-2.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.13">Expected Version Tokens:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.14">
+            <p id="section-6.1-2.14.1">None<a href="#section-6.1-2.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.15">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.16">
+            <p id="section-6.1-2.16.1">this document<a href="#section-6.1-2.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-6-2.3">Description:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.4">
-          <p id="section-6-2.4.1">Establishes a transposed HTTP channel that runs over a byte stream.<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.5">Expected Version Tokens:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.6">
-          <p id="section-6-2.6.1">None<a href="#section-6-2.6.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.7">Reference:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.8">
-          <p id="section-6-2.8.1">this document<a href="#section-6-2.8.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.9">Value:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.10">
-          <p id="section-6-2.10.1">ptth-udp<a href="#section-6-2.10.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.11">Description:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.12">
-          <p id="section-6-2.12.1">Establishes a transposed HTTP channel that runs over UDP.<a href="#section-6-2.12.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.13">Expected Version Tokens:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.14">
-          <p id="section-6-2.14.1">None<a href="#section-6-2.14.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-2.15">Reference:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-2.16">
-          <p id="section-6-2.16.1">this document<a href="#section-6-2.16.1" class="pilcrow">¶</a></p>
-</dd>
-      <dd class="break"></dd>
 </dl>
-<p id="section-6-3">This document also requests IANA to register the following entry in the "TLS
+</section>
+</div>
+<div id="tls-exporter-label">
+<section id="section-6.2">
+        <h3 id="name-tls-exporter-label">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-tls-exporter-label" class="section-name selfRef">TLS Exporter Label</a>
+        </h3>
+<p id="section-6.2-1">Once approved, this document will request IANA to register the following entry in the "TLS
 Exporter Labels" registry maintained at
-<a href="https://www.iana.org/assignments/tls-parameters">https://www.iana.org/assignments/tls-parameters</a>:<a href="#section-6-3" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6-4">
-        <dt id="section-6-4.1">Value:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.2">
-          <p id="section-6-4.2.1">ptth-udp<a href="#section-6-4.2.1" class="pilcrow">¶</a></p>
+<a href="https://www.iana.org/assignments/tls-parameters">https://www.iana.org/assignments/tls-parameters</a>:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.2-2">
+          <dt id="section-6.2-2.1">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-2.2">
+            <p id="section-6.2-2.2.1">ptth-udp<a href="#section-6.2-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.2-2.3">DTLS-OK:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-2.4">
+            <p id="section-6.2-2.4.1">N<a href="#section-6.2-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.2-2.5">Recommended:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-2.6">
+            <p id="section-6.2-2.6.1">Y<a href="#section-6.2-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.2-2.7">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-2.8">
+            <p id="section-6.2-2.8.1">this document<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-6-4.3">DTLS-OK:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.4">
-          <p id="section-6-4.4.1">N<a href="#section-6-4.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-4.5">Recommended:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.6">
-          <p id="section-6-4.6.1">Y<a href="#section-6-4.6.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-6-4.7">Reference:</dt>
-        <dd style="margin-left: 1.5em" id="section-6-4.8">
-          <p id="section-6-4.8.1">this document<a href="#section-6-4.8.1" class="pilcrow">¶</a></p>
-</dd>
-      <dd class="break"></dd>
 </dl>
+</section>
+</div>
+<div id="well-known-uri">
+<section id="section-6.3">
+        <h3 id="name-well-known-uri">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-well-known-uri" class="section-name selfRef">Well-Known URI</a>
+        </h3>
+<p id="section-6.3-1">Once approved, this document will request IANA to register the
+following entry in the "Well-Known URIs" registry maintained at <a href="https://www.iana.org/assignments/well-known-uris">https://www.iana.org/assignments/well-known-uris</a>:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.3-2">
+          <dt id="section-6.3-2.1">URI Suffix:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.3-2.2">
+            <p id="section-6.3-2.2.1">ptth<a href="#section-6.3-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.3-2.3">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.3-2.4">
+            <p id="section-6.3-2.4.1">this document<a href="#section-6.3-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.3-2.5">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.3-2.6">
+            <p id="section-6.3-2.6.1">permanent<a href="#section-6.3-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.3-2.7">Change Controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.3-2.8">
+            <p id="section-6.3-2.8.1">IETF<a href="#section-6.3-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -1610,8 +1775,16 @@ Exporter Labels" registry maintained at
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="TLS">[TLS]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-rfc8446bis-14</span>, <time datetime="2025-09-13" class="refDate">13 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-rfc8446bis-14">https://datatracker.ietf.org/doc/html/draft-ietf-tls-rfc8446bis-14</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="URI-TEMPLATE">[URI-TEMPLATE]</dt>
+        <dd>
+<span class="refAuthor">Gregorio, J.</span>, <span class="refAuthor">Fielding, R.</span>, <span class="refAuthor">Hadley, M.</span>, <span class="refAuthor">Nottingham, M.</span>, and <span class="refAuthor">D. Orchard</span>, <span class="refTitle">"URI Template"</span>, <span class="seriesInfo">RFC 6570</span>, <span class="seriesInfo">DOI 10.17487/RFC6570</span>, <time datetime="2012-03" class="refDate">March 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6570">https://www.rfc-editor.org/rfc/rfc6570</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="WEB-ORIGIN">[WEB-ORIGIN]</dt>
+      <dd>
+<span class="refAuthor">Barth, A.</span>, <span class="refTitle">"The Web Origin Concept"</span>, <span class="seriesInfo">RFC 6454</span>, <span class="seriesInfo">DOI 10.17487/RFC6454</span>, <time datetime="2011-12" class="refDate">December 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6454">https://www.rfc-editor.org/rfc/rfc6454</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
