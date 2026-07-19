@@ -1428,13 +1428,15 @@ ALPN identifier.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">When the transposition succeeds, the reverse proxy returns a successful response
 — a 101 (Switching Protocols) response in HTTP/1.1, or a 2xx (Successful)
 response in HTTP/2 and HTTP/3 — carrying an ALPN response header field that
-specifies the chosen HTTP version. The transposed channel is then carried
-directly over the resulting bidirectional byte stream.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">Capsules are not used on a transposed HTTP/1 or HTTP/2 channel: the transposed
-HTTP protocol supplies its own framing and can exchange metadata — through
-header fields, and in HTTP/2 through control frames — so it already provides
-what capsules would. Because HTTP/2 offers richer framing and metadata exchange
-than HTTP/1.1, HTTP/2 is <span class="bcp14">RECOMMENDED</span> as the transposed protocol.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+specifies the chosen HTTP version. HTTP of that version is then carried directly
+over the resulting bidirectional byte stream, with neither TLS nor capsules: its
+confidentiality and integrity are provided by the setup channel's encryption,
+and the transposed HTTP protocol supplies its own framing and can exchange
+metadata such as the intent to shut down the connection. When HTTP/2 is
+selected, it is started by the reverse proxy sending a connection preface
+(<span><a href="https://rfc-editor.org/rfc/rfc9113#section-3.3" class="relref">Section 3.3</a> of [<a href="#H2" class="cite xref">HTTP/2</a>]</span>).<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">Because HTTP/2 offers cleaner framing and metadata exchange than HTTP/1.1,
+HTTP/2 is <span class="bcp14">RECOMMENDED</span> as the transposed protocol.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5"><a href="#fig-establishment" class="auto internal xref">Figure 2</a> shows an HTTP/1.1 exchange establishing a transposed
 channel. Here the Basic HTTP Authentication Scheme <span>[<a href="#BASIC-AUTH" class="cite xref">BASIC-AUTH</a>]</span>
 authenticates the backend server, which offers both HTTP/2 and HTTP/1.1; the
