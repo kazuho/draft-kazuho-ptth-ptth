@@ -100,10 +100,11 @@ channel of any HTTP version.
 
 ## Client Configuration {#client-config}
 
-Backend servers are configured to use a reverse proxy with a URI Template
-({{!URI-TEMPLATE=RFC6570}}) that describes the target URI of the PTTH establishment
-request. The URI Template identifies the reverse proxy and carries the backend
-origin for which the backend server is registering a transposed channel.
+When backend servers are configured to receive forwarded requests scoped by an
+origin, they use a target URI built from a URI Template
+({{!URI-TEMPLATE=RFC6570}}) to establish a transposed channel. The URI Template
+identifies the reverse proxy and the origin for which the backend server is
+registering a transposed channel.
 
 The following examples show URI Templates for registering PTTH channels:
 
