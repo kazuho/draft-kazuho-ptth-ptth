@@ -2,7 +2,7 @@
 title: "Protocol for Transposed Transactions over HTTP"
 docname: draft-kazuho-ptth-ptth-latest
 category: std
-wg: httpbis
+wg: ptth
 ipr: trust200902
 keyword: internet-draft
 stand_alone: yes
