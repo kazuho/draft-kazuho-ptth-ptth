@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-19T01:29:10.244518+00:00",
+  "timestamp": "2026-07-21T01:28:51.311582+00:00",
   "repo": "kazuho/draft-kazuho-ptth-ptth",
   "labels": [
     {
@@ -56,25 +56,35 @@
       "id": "PR_kwDOPVzIEM7wTGwt",
       "title": "Added Client Configuration section, template and well-known URI",
       "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/1",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "yaroslavros",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-07-10T18:22:11Z",
-      "updatedAt": "2026-07-10T23:54:23Z",
+      "updatedAt": "2026-07-19T13:03:49Z",
       "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
       "baseRefName": "main",
       "baseRefOid": "c3332da37aa7298343fdd7b0d61c7ed2897061ac",
       "headRepository": "yaroslavros/draft-kazuho-ptth-ptth",
       "headRefName": "backend-origin",
-      "headRefOid": "4949f1448d0e3f18b7d9c07ce6721262eaf79db3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "5ebafcbfb3b51f1c7521461a8332fb145b44825a",
+      "closedAt": "2026-07-19T13:03:37Z",
+      "mergedAt": "2026-07-19T13:03:37Z",
+      "mergedBy": "kazuho",
+      "mergeCommit": {
+        "oid": "0a3930df37afb2d542391307fd5d8e37484a0f8c"
+      },
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "OWNER",
+          "body": "Thank you for the changes! LGTM.",
+          "createdAt": "2026-07-19T13:03:49Z",
+          "updatedAt": "2026-07-19T13:03:49Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOPVzIEM8AAAABFq4IBg",
@@ -125,6 +135,26 @@
               "body": "Sorry here also.\n\n```suggestion\n## Client Configuration {#client-config}\n\nWhen backend servers are configured to receive forwarded requests scoped by an\norigin, they use a target URI built from a URI Template\n({{!URI-TEMPLATE=RFC6570}}) to establish a transposed channel. The URI Template\nidentifies the reverse proxy and the origin for which the backend server is\nregistering a transposed channel.\n```",
               "createdAt": "2026-07-10T23:54:23Z",
               "updatedAt": "2026-07-10T23:54:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABGfSXqA",
+          "commit": {
+            "abbreviatedOid": "5ebafcb"
+          },
+          "author": "yaroslavros",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-19T08:38:55Z",
+          "updatedAt": "2026-07-19T08:38:55Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Done. Please check.",
+              "createdAt": "2026-07-19T08:38:55Z",
+              "updatedAt": "2026-07-19T08:38:55Z"
             }
           ]
         }
@@ -288,26 +318,42 @@
       "id": "PR_kwDOPVzIEM7weFM1",
       "title": "clarify that H1/H2 are used without a new layer of TLS",
       "url": "https://github.com/kazuho/draft-kazuho-ptth-ptth/pull/5",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Be clear that when H1 or H2 is negotiated, they are used without TLS; the setup channel provides confidentiality and integrity.\r\n\r\nAlso, provide an example of metadata; in this case the intent to shut down the connection (in H1, it's `connection: close`, in H2, it's GOAWAY).",
       "createdAt": "2026-07-11T07:03:59Z",
-      "updatedAt": "2026-07-11T07:46:18Z",
+      "updatedAt": "2026-07-19T13:08:35Z",
       "baseRepository": "kazuho/draft-kazuho-ptth-ptth",
       "baseRefName": "main",
       "baseRefOid": "e55806eff17e6641013fe66d8cce86d75898df22",
       "headRepository": "kazuho/draft-kazuho-ptth-ptth",
       "headRefName": "kazuho/h1-h2-in-clear",
       "headRefOid": "c434ab76f2fbb5bea3dac9c870836df112846ce0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-07-19T13:08:35Z",
+      "mergedAt": "2026-07-19T13:08:35Z",
+      "mergedBy": "kazuho",
+      "mergeCommit": {
+        "oid": "df8041af9df7a281b5116ba35db887673eb7beab"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOPVzIEM8AAAABGfSc_w",
+          "commit": {
+            "abbreviatedOid": "c434ab7"
+          },
+          "author": "yaroslavros",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-07-19T08:39:37Z",
+          "updatedAt": "2026-07-19T08:39:37Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
